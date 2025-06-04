@@ -1,0 +1,5 @@
+stringtie =3.0.0
+# rmats =4.3.0
+samtools =1.22
+gffread =0.12.7
+snakemake
