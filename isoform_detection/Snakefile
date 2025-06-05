@@ -1,15 +1,19 @@
-sample_id = config['sample_id']
+sample_id = config["sample_id"]
 
-os.makedirs('slurm', exist_ok=True)
+os.makedirs("slurm", exist_ok=True)
 
 
 def get_fastq(wildcards):
-    if config['read_mode'] == 'single':
+    if config["read_mode"] == "single":
         return f"fastq/{wildcards.sample_id}_0.fq.gz"
-    elif config['read_mode'] == 'paired':
-        return [f"fastq/{wildcards.sample_id}_1.fq.gz", f"fastq/{wildcards.sample_id}_2.fq.gz"]
+    elif config["read_mode"] == "paired":
+        return [
+            f"fastq/{wildcards.sample_id}_1.fq.gz",
+            f"fastq/{wildcards.sample_id}_2.fq.gz",
+        ]
     else:
-        sys.exit('Invalid read mode')
+        sys.exit("Invalid read mode")
+
 
 rule all:
     input:
@@ -18,8 +22,8 @@ rule all:
 
 rule stringtie:
     input:
-        bam=config['bam'],
-        gff=config['gff'],
+        bam=config["bam"],
+        gff=config["gff"],
     output:
         gtf="stringtie/{sample_id}.gtf",
     shell:
@@ -33,7 +37,7 @@ rule stringtie:
 rule fastaForTranscripts:
     input:
         gtf="stringtie/{sample_id}.gtf",
-        genome=config['genome'],
+        genome=config["genome"],
     output:
         fa="stringtie/{sample_id}.fa",
     shell:
@@ -59,7 +63,7 @@ rule kallisto_index:
 
 rule get_fastq_from_bam:
     input:
-        bam=config['bam'],
+        bam=config["bam"],
     output:
         fq0="fastq/{sample_id}_0.fq.gz",
         fq1="fastq/{sample_id}_1.fq.gz",
@@ -81,9 +85,9 @@ rule kallisto_quant:
         "env/kallisto.yml"
     params:
         fq=get_fastq,
-        single='--single' if config['read_mode'] == 'single' else '',
-        fragment_length=config['fragment_length'],
-        fragment_sd=config['fragment_sd'],
+        single="--single" if config["read_mode"] == "single" else "",
+        fragment_length=config["fragment_length"],
+        fragment_sd=config["fragment_sd"],
     shell:
         r"""
         kallisto quant {params.single} -l {params.fragment_length} -s {params.fragment_sd} \
@@ -148,7 +152,7 @@ rule read_to_transcripts_tsv:
 #         """
 #
 #
-#rule download:
+# rule download:
 #    output:
 #        "ref/schistosoma_mansoni.PRJEA36577.WBPS19.genomic_softmasked.fa",
 #        "schistosoma_mansoni.PRJEA36577.WBPS19.annotations.gff3",
@@ -161,5 +165,3 @@ rule read_to_transcripts_tsv:
 #        gunzip schistosoma_mansoni.PRJEA36577.WBPS19.annotations.gff3.gz
 #        samtools faidx ref/schistosoma_mansoni.PRJEA36577.WBPS19.genomic_softmasked.fa
 #        """
-
-
