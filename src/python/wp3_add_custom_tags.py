@@ -26,7 +26,7 @@ def load_cluster_map(cluster_file, read_col=1, gene_col=2, transcript_col=3, del
         delimiter (str): Column delimiter (default tab).
 
     Returns:
-        dict: Mapping {read_name: cluster_id_int} where cluster IDs are assigned within each gene.
+        dict: Mapping {read_id: cluster_id_int} where cluster IDs are assigned within each gene.
 
     Raises:
         FileNotFoundError: If the cluster_file does not exist.
@@ -104,6 +104,7 @@ def add_isoform_tags(input_bam, output_bam, cluster_map=None):
         sys.exit(f"Error creating output BAM '{output_bam}': {e}")
 
     for read in bam_in.fetch(until_eof=True):
+        # Retain unmapped or secondary/supplementary reads without tag
         if read.is_unmapped or read.is_secondary or read.is_supplementary:
             bam_out.write(read)
             continue
