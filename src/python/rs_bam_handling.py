@@ -17,7 +17,7 @@ def bamTagHanding(bamFile, threadNumber = 1, output = False, sortTarget = "CB", 
     # If mapping file is used temporary files will be created and deleted from complete split of the tag 
     # final input will be of form (output_) grouping.bam 
     # if any of tags are not present in the groupings they will be left as temp files
-     # will place results in directory named output_tag_files or the bamfile- ".bam" _tag_files
+    # will place results in directory named output_tag_files or the bamfile- ".bam" _tag_files
     if output:
         directoryName = output+ "__tag_files"
     else:
@@ -32,7 +32,7 @@ def bamTagHanding(bamFile, threadNumber = 1, output = False, sortTarget = "CB", 
         if mapping.type() == dict:
             if output:
                 for cellType in mapping.keys:
-                    targetList = [sortTarget + tag + ".bam" for tag in mapping[cellType]]
+                    targetList = [dirPath + sortTarget + tag + ".bam" for tag in mapping[cellType]]
                     tempFiles.extend[targetList]
                     for target in targetList:
                         if not os.path.exists(target):
@@ -41,7 +41,7 @@ def bamTagHanding(bamFile, threadNumber = 1, output = False, sortTarget = "CB", 
                     pysam.merge("-f", "-@", threadNumber, "-o", dirPath + output + cellType + ".bam", *targetList)
             else:
                 for cellType in mapping.keys:
-                    targetList = [sortTarget + tag + ".bam" for tag in mapping[cellType]]
+                    targetList = [dirPath + sortTarget + tag + ".bam" for tag in mapping[cellType]]
                     tempFiles.extend[targetList]
                     for target in targetList:
                         if not os.path.exists(target):
@@ -57,7 +57,7 @@ def bamTagHanding(bamFile, threadNumber = 1, output = False, sortTarget = "CB", 
             
             if output:
                 for cellType in mappingDict.keys:
-                    targetList = [sortTarget + tag + ".bam" for tag in mappingDict[cellType]]
+                    targetList = [dirPath + sortTarget + tag + ".bam" for tag in mappingDict[cellType]]
                     tempFiles.extend[targetList]
                     for target in targetList:
                         if not os.path.exists(target):
@@ -66,7 +66,7 @@ def bamTagHanding(bamFile, threadNumber = 1, output = False, sortTarget = "CB", 
                     pysam.merge("-f", "-@", threadNumber, "-o", dirPath + output + cellType + ".bam", *targetList)
             else:
                 for cellType in mappingDict.keys:
-                    targetList = [sortTarget + tag + ".bam" for tag in mappingDict[cellType]]
+                    targetList = [dirPath + sortTarget + tag + ".bam" for tag in mappingDict[cellType]]
                     tempFiles.extend[targetList]
                     for target in targetList:
                         if not os.path.exists(target):
