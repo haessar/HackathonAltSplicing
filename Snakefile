@@ -1,5 +1,15 @@
-sample_id = os.path.basename(re.sub("\.bam", "", config["bam"]))
+sample_id = config['sample_id']
 
+os.makedirs('slurm', exist_ok=True)
+
+
+def get_fastq(wildcards):
+    if config['read_mode'] == 'single':
+        return f"fastq/{wildcards.sample_id}_0.fq.gz"
+    elif config['read_mode'] == 'paired':
+        return [f"fastq/{wildcards.sample_id}_1.fq.gz", f"fastq/{wildcards.sample_id}_2.fq.gz"]
+    else:
+        sys.exit('Invalid read mode')
 
 rule all:
     input:
@@ -8,23 +18,22 @@ rule all:
 
 rule stringtie:
     input:
-        bam="data/{sample_id}.bam",
-        gff="ref/schistosoma_mansoni.PRJEA36577.WBPS19.annotations.gff3",
+        bam=config['bam'],
+        gff=config['gff'],
     output:
         gtf="stringtie/{sample_id}.gtf",
     shell:
         r"""
         stringtie -o {output.gtf} \
             -p 24 \
-            -G {input.gff} \ 
-            {input.bam} 
+            -G {input.gff} {input.bam} 
         """
 
 
 rule fastaForTranscripts:
     input:
         gtf="stringtie/{sample_id}.gtf",
-        genome="ref/schistosoma_mansoni.PRJEA36577.WBPS19.genomic_softmasked.fa",
+        genome=config['genome'],
     output:
         fa="stringtie/{sample_id}.fa",
     shell:
@@ -50,28 +59,35 @@ rule kallisto_index:
 
 rule get_fastq_from_bam:
     input:
-        bam="data/{sample_id}.bam",
+        bam=config['bam'],
     output:
+        fq0="fastq/{sample_id}_0.fq.gz",
         fq1="fastq/{sample_id}_1.fq.gz",
         fq2="fastq/{sample_id}_2.fq.gz",
     shell:
         r"""
-        samtools collate -@ 8 -u -f --no-PG {input.bam} -O \
-        | samtools fastq -@ 8 -1 {output.fq1} -2 {output.fq2}
+        samtools collate -@ 8 -u --no-PG {input.bam} -O \
+        | samtools fastq -@ 8 -0 {output.fq0} -1 {output.fq1} -2 {output.fq2}
         """
 
 
 rule kallisto_quant:
     input:
         idx="kallisto/{sample_id}.idx",
-        fq=["fastq/{sample_id}_1.fq.gz", "fastq/{sample_id}_2.fq.gz"],
+        fq=["fastq/{sample_id}_0.fq.gz"],
     output:
         "kallisto/{sample_id}/pseudoalignments.bam",
     conda:
         "env/kallisto.yml"
+    params:
+        fq=get_fastq,
+        single='--single' if config['read_mode'] == 'single' else '',
+        fragment_length=config['fragment_length'],
+        fragment_sd=config['fragment_sd'],
     shell:
         r"""
-        kallisto quant --threads 24 --pseudobam -o kallisto/{wildcards.sample_id} -i {input.idx} {input.fq}
+        kallisto quant {params.single} -l {params.fragment_length} -s {params.fragment_sd} \
+            --threads 24 --pseudobam -o kallisto/{wildcards.sample_id} -i {input.idx} {params.fq}
         """
 
 

@@ -2,7 +2,6 @@
 
 import argparse
 import pysam
-import gffutils
 import re
 
 parser = argparse.ArgumentParser(

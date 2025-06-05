@@ -34,10 +34,17 @@ conda install --file requirements.txt --yes
 
 ```
 snakemake -n -p -j 10 -C \
-    bam=data/ERR11178264_Illumina_NovaSeq_6000_paired_end_sequencing.bam \
-    genome=data/schistosoma_mansoni.PRJEA36577.WBPS19.genomic_softmasked.fa \
-    gff=ref/schistosoma_mansoni.PRJEA36577.WBPS19.canonical_geneset.gtf \
-    -d /export/projects/III-data/wcmp_bioinformatics/db291g/projects/20250604_HackathonAltSplicing \
+        sample_id=Mira_1 \
+        bam=dario/Mira_1.sample.bam \
+        genome=bam_manipulation/published/Smansoni_genome/fasta/genome.fa \
+        gff=ref/schistosoma_mansoni.PRJEA36577.WBPS19.annotations.gff3 \
+        read_mode=single \
+        fragment_length=300 \
+        fragment_sd=100 \
+    --executor slurm \
+    --configfile config/snakemake.yaml \
+    --latency-wait 60 \
+    -d /mnt/data/project0061 \
     --use-conda
 ```
 
