@@ -1,14 +1,20 @@
 import os
 import subprocess
 
-def plot_exon_intron(
+#Creates a plot defined by score from a single BED file
+# Assumes no thickStart, thickEnd, and block columns
+def plot_by_score(
     bed_file,
     region,
-    output_file="intron_exon_plot.png",
+    output_file="plot_by_score.png",
     height=2,
     title="test",
-    temp_ini="temp.ini",
-    use_itemRGB=False
+    colour="coolwarm", #change the colorscheme as desired
+    trackLabelFraction=0.2,
+    dpi=130,
+    width=38,
+    height=2,
+    temp_ini="temp.ini"
 ):
     with open(temp_ini, "w") as f:
         f.write(f"""
@@ -18,32 +24,14 @@ show_labels = false
 
 [spacer]
 height = 0.05
-""")
 
-        if use_itemRGB:
-            f.write(f"""
-[itemRGB shading]
-height = {height}
-title = {title}
-style = exonarrows
-border_color = black
-arrow_interval = 10
-fontsize = 10
-file = {bed_file}
-show_labels = true
-show_data_range = false
-use_itemRGB = true
-""")
-        else:
-            f.write(f"""
 [score shading]
 height = {height}
 title = {title}
-style = exonarrows
+style = UCSC
 border_color = black
 arrow_interval = 10
 fontsize = 10
-color = Reds
 file = {bed_file}
 show_labels = true
 show_data_range = true
@@ -54,16 +42,18 @@ show_data_range = true
         "pyGenomeTracks",
         "--tracks", temp_ini,
         "--region", region,
-        "--outFileName", output_file
+        "--outFileName", output_file,
+        "--dpi", str(dpi),
+        "--width", str(width),
+        "--trackLabelFraction", str(trackLabelFraction)
     ])
 
     print(f"✅ Plot saved to: {output_file}")
 
 
 # Example call
-plot_exon_intron(
+plot_by_score(
     bed_file="volvox-bed12.bed",           
     region="ctgA:1000-23000",
-    output_file="intron_exon_plot.png",
-    use_itemRGB=False #change whether the colour is by score or itemRGB
+    output_file="plot_by_score.png",
 )
