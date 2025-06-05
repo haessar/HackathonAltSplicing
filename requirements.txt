@@ -1,5 +1,6 @@
 stringtie =3.0.0
-# rmats =4.3.0
 samtools =1.22
 gffread =0.12.7
-snakemake
+pysam =0.23.1
+# bwa =0.7.19
+snakemake =9.5.1

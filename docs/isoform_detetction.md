@@ -33,7 +33,10 @@ conda install --file requirements.txt --yes
 # Run
 
 ```
-snakemake -n -p -j 10 -C bam=data/ERR11178264_Illumina_NovaSeq_6000_paired_end_sequencing.bam \
+snakemake -n -p -j 10 -C \
+    bam=data/ERR11178264_Illumina_NovaSeq_6000_paired_end_sequencing.bam \
+    genome=data/schistosoma_mansoni.PRJEA36577.WBPS19.genomic_softmasked.fa \
+    gff=ref/schistosoma_mansoni.PRJEA36577.WBPS19.canonical_geneset.gtf \
     -d /export/projects/III-data/wcmp_bioinformatics/db291g/projects/20250604_HackathonAltSplicing \
     --use-conda
 ```
