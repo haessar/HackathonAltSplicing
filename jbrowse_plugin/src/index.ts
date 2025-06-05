@@ -7,7 +7,7 @@ import {
   ReactComponent as HelloViewReactComponent,
   stateModel as helloViewStateModel,
 } from './HelloView'
-import BedAdapterF from './BedAdapter2'
+import BedAdapterF from './BedAdapter'
 export default class AltSplicingPlugin extends Plugin {
   name = 'AltSplicingPlugin'
   version = version
