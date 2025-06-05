@@ -8,10 +8,10 @@ export default function BedAdapterF(pluginManager: PluginManager) {
   pluginManager.addAdapterType(
     () =>
       new AdapterType({
-        name: 'BedAdapter',
-        displayName: 'BED adapter',
+        name: 'BedAdapter2',
+        displayName: 'BED adapter 2',
         configSchema,
-        getAdapterClass: () => import('./BedAdapter').then(r => r.default),
+        getAdapterClass: () => import('./BedAdapter2').then(r => r.default),
       }),
   )
 }
