@@ -1,8 +1,6 @@
 import pysam
 import pysam.samtools
-import csv
 import os
-from contextlib import chdir
 import pathlib
 from pathlib import Path
 import pandas as pd
