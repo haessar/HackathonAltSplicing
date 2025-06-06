@@ -4,9 +4,6 @@ author: "F Blow"
 date: "2024-12-12"
 output: html_document
 ---
-```{r}
-cc_barcode <- readRDS("/Users/vaidehipandya/Desktop/run1.combined.v10_integrated_55 2.rds")
-```
   
 ```{r}
 # function to check install and load packages
