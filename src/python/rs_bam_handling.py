@@ -6,14 +6,16 @@ from contextlib import chdir
 import pathlib
 from pathlib import Path
 
-def bamTagHanding(bamFile, threadNumber = 7, output = False, sortTarget = "CB", mapping = False):
+def bamTagHanding(bamFile, threadNumber = 7, output = False, sortTarget = "CB", mapping = False, sep = ','):
     # function takes unsorted bamFile and produces a split based upon tags
     # expected inputs:
     # bamFile: string of input file name 
     # output: optional input to add prefix to all output files 
     # sort target: default value CB: the tag which the sorting and spliting will be based upon 
     # mapping: if multiple values of target tag are to be grouped together. 
-    # Accepts input as dictionary of form {grouping : [tag_value1, ..., tag_valueN]} or as csv file where first column is tag value and second columns are the group which the tag belongs to
+    # Accepts input as dictionary of form {grouping : [tag_value1, ..., tag_valueN]} 
+    # or as a delimited file where first column is tag value and second columns are the group which the tag belongs to 
+    # sep is the delimiter of the file
     # output is set of files split as requested.  
     # Without mapping file split file based upon tag of form (output_) sortTarget value of tag.bam
     # If mapping file is used temporary files will be created and deleted from complete split of the tag 
@@ -55,7 +57,7 @@ def bamTagHanding(bamFile, threadNumber = 7, output = False, sortTarget = "CB", 
         else:
             mappingDict = {}
             with open(mapping, newline="") as mappingFile:
-                reader = csv.reader(mappingFile, delimiter=",")
+                reader = csv.reader(mappingFile, delimiter=sep)
                 for mapRow in reader:
                     if mapRow[1] in mappingDict.keys():
                         mappingDict[mapRow[1]].append(mapRow[0])
