@@ -7,7 +7,7 @@ import pathlib
 from pathlib import Path
 import pandas as pd
 
-def bamTagHanding(bamFile, threadNumber = 7, output = False, sortTarget = "CB", mapping = False, delim = ",", mappingColumns = ["Clusters", "cell_barcode"] ):
+def bamTagHanding(bamFile, threadNumber = 7, output = False, sortTarget = "CB", mapping = False, delim = ",", mappingColumns = ["Cluster", "cell_barcode"] ):
     # function takes unsorted bamFile and produces a split based upon tags
     # expected inputs:
     # bamFile: string of input file name 
@@ -15,7 +15,8 @@ def bamTagHanding(bamFile, threadNumber = 7, output = False, sortTarget = "CB", 
     # sort target: default value CB: the tag which the sorting and spliting will be based upon 
     # mapping: if multiple values of target tag are to be grouped together. 
     # Accepts input as dictionary of form {grouping : [tag_value1, ..., tag_valueN]} 
-    # or as a delimited file with column names mappingColumns[0] = grouping column mappingColumns[1] = tag values
+    # or as a delimited file where first column is tag value and second columns are the group which the tag belongs to 
+    # sep is the delimiter of the file
     # output is set of files split as requested.  
     # Without mapping file split file based upon tag of form (output_) sortTarget value of tag.bam
     # If mapping file is used temporary files will be created and deleted from complete split of the tag 
@@ -31,29 +32,27 @@ def bamTagHanding(bamFile, threadNumber = 7, output = False, sortTarget = "CB", 
     dirPath = str(pathlib.Path().resolve()) + "/" + directoryName + "/"
     if mapping:
         mappingTagsMissing = []
-        pysam.samtools.split(bamFile, "-d", sortTarget, "-@", str(threadNumber), "-u", dirPath + "untagged.bam", "--output-fmt", "BAM", "-f", dirPath + ("'" + sortTarget + "%!.bam'"), catch_stdout=False)
+        pysam.samtools.split(bamFile, "-d", sortTarget, "-@", str(threadNumber), "-u", dirPath + "untagged.bam", "--output-fmt", "BAM", "-f", dirPath + ("'" + "%!.bam'"), catch_stdout=False)
         tempFiles = []
         if type(mapping) == dict:
             if output:
                 for cellType in mapping.keys():
                     targetList = [dirPath + ("'" + "_" + tag + ".bam'") for tag in mapping[cellType]]
                     tempFiles.extend(targetList)
-                    for target in targetList:
-                        if not Path(target).is_file():
-                            mappingTagsMissing.append(target)
-                            targetList.remove(target)
-                    print(targetList)
-                    pysam.merge("-f", "-@", str(threadNumber), "-o", dirPath + output + cellType + ".bam", *targetList)
+                    tempFiles.extend(targetList)
+                    presentList = [tag for tag in targetList if Path(tag).is_file()]
+                    mappingTagsMissing.extend(list(set(targetList) - set(presentList)))
+                    if len(presentList) > 0:
+                        pysam.merge("-f", "-@", str(threadNumber), "-o", dirPath + output + cellType + ".bam", *targetList)
             else:
                 for cellType in mapping.keys():
                     targetList = [dirPath + ("'"+ tag + ".bam'")  for tag in mapping[cellType]]
                     tempFiles.extend(targetList)
-                    for target in targetList:
-                        if not Path(target).is_file():
-                            mappingTagsMissing.append(target)
-                            targetList.remove(target)
-                    print(targetList)
-                    pysam.merge("-f", "-@", str(threadNumber),  "-o", dirPath + cellType + ".bam", *targetList)
+                    tempFiles.extend(targetList)
+                    presentList = [tag for tag in targetList if Path(tag).is_file()]
+                    mappingTagsMissing.extend(list(set(targetList)- set(presentList)))
+                    if len(presentList) > 0:
+                        pysam.merge("-f", "-@", str(threadNumber),  "-o", dirPath + cellType + ".bam", *targetList)
         else:
             mappingDict = {}
             mappingDf = pd.read_csv(mapping, sep = delim)
@@ -63,28 +62,28 @@ def bamTagHanding(bamFile, threadNumber = 7, output = False, sortTarget = "CB", 
 
             if output:
                 for cellType in mappingDict.keys():
-                    targetList = [dirPath + ("'"+ + tag + ".bam'") for tag in mappingDict[cellType]]
+                    targetList = [dirPath + ("'" + tag + ".bam'") for tag in mappingDict[cellType]]
                     tempFiles.extend(targetList)
-                    for target in targetList:
-                        if not Path(target).is_file():
-                            print(target)
-                            mappingTagsMissing.append(target)
-                            targetList.remove(target)
-                    print(targetList)
-                    pysam.merge("-f", "-@", str(threadNumber), "-o", dirPath + output + cellType + ".bam", *targetList)
+                    presentList = [tag for tag in targetList if Path(tag).is_file()]
+                    mappingTagsMissing.extend(list(set(targetList)- set(presentList)))
+                    if len(presentList) > 0:
+                        pysam.merge("-f", "-@", str(threadNumber), "-o", dirPath + output + cellType + ".bam", *targetList)
             else:
                 for cellType in mappingDict.keys():
-                    targetList = [dirPath + ("'"  + tag + ".bam'")  for tag in mappingDict[cellType]]
+                    targetList = [dirPath + ("'" + tag + ".bam'")  for tag in mappingDict[cellType]]
                     tempFiles.extend(targetList)
-                    for target in targetList:
-                        if not Path(target).is_file():
-                            mappingTagsMissing.append(target)
-                            targetList.remove(target)
-                    pysam.merge("-f", "-@", str(threadNumber), "-o", dirPath + cellType + ".bam", *targetList)
+                    presentList = [tag for tag in targetList if Path(tag).is_file()]
+                    mappingTagsMissing.extend(list(set(targetList)- set(presentList)))
+                    if len(presentList) > 0:
+                        pysam.merge("-f", "-@", str(threadNumber), "-o", dirPath + cellType + ".bam", *presentList)
         for tempFile in tempFiles:
             if os.path.exists(tempFile):
                 os.remove(tempFile)
-        print(mappingTagsMissing)
+        if len(mappingTagsMissing) == 0:
+            mappingTagsMissing = [(tagNotPresent.split("/")[-1])[1:-4] for tagNotPresent in mappingTagsMissing]
+            print("Following labelled cells missing in data ")
+            print(mappingTagsMissing)
+        
     else:
         if output:
             pysam.samtools.split(bamFile, "-d", sortTarget, "-@", str(threadNumber), "-u", dirPath + "untagged.bam", "--output-fmt", "BAM", "-f", dirPath + (output + "_" + sortTarget + "%!.bam").replace("-", "_"), catch_stdout=False)
