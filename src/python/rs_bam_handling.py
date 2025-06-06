@@ -14,7 +14,8 @@ def bamTagHanding(bamFile, threadNumber = 7, output = False, sortTarget = "CB", 
     # output: optional input to add prefix to all output files 
     # sort target: default value CB: the tag which the sorting and spliting will be based upon 
     # mapping: if multiple values of target tag are to be grouped together. 
-    # Accepts input as dictionary of form {grouping : [tag_value1, ..., tag_valueN]} or as csv file where first column is grouping and other columns are tag values 
+    # Accepts input as dictionary of form {grouping : [tag_value1, ..., tag_valueN]} 
+    # or as a delimited file with column names mappingColumns[0] = grouping column mappingColumns[1] = tag values
     # output is set of files split as requested.  
     # Without mapping file split file based upon tag of form (output_) sortTarget value of tag.bam
     # If mapping file is used temporary files will be created and deleted from complete split of the tag 
