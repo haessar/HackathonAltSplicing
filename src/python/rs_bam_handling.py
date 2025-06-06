@@ -5,17 +5,16 @@ import os
 from contextlib import chdir
 import pathlib
 from pathlib import Path
+import pandas as pd
 
-def bamTagHanding(bamFile, threadNumber = 7, output = False, sortTarget = "CB", mapping = False, sep = ','):
+def bamTagHanding(bamFile, threadNumber = 7, output = False, sortTarget = "CB", mapping = False, delim = "'", mappingColumns = ["Clusters", "cell_barcode"] ):
     # function takes unsorted bamFile and produces a split based upon tags
     # expected inputs:
     # bamFile: string of input file name 
     # output: optional input to add prefix to all output files 
     # sort target: default value CB: the tag which the sorting and spliting will be based upon 
     # mapping: if multiple values of target tag are to be grouped together. 
-    # Accepts input as dictionary of form {grouping : [tag_value1, ..., tag_valueN]} 
-    # or as a delimited file where first column is tag value and second columns are the group which the tag belongs to 
-    # sep is the delimiter of the file
+    # Accepts input as dictionary of form {grouping : [tag_value1, ..., tag_valueN]} or as csv file where first column is grouping and other columns are tag values 
     # output is set of files split as requested.  
     # Without mapping file split file based upon tag of form (output_) sortTarget value of tag.bam
     # If mapping file is used temporary files will be created and deleted from complete split of the tag 
@@ -56,13 +55,11 @@ def bamTagHanding(bamFile, threadNumber = 7, output = False, sortTarget = "CB", 
                     pysam.merge("-f", "-@", str(threadNumber),  "-o", dirPath + cellType + ".bam", *targetList)
         else:
             mappingDict = {}
-            with open(mapping, newline="") as mappingFile:
-                reader = csv.reader(mappingFile, delimiter=sep)
-                for mapRow in reader:
-                    if mapRow[1] in mappingDict.keys():
-                        mappingDict[mapRow[1]].append(mapRow[0])
-                    else:
-                        mappingDict[mapRow[1]] = [mapRow[0]]
+            mappingDf = pd.read_csv(mapping, sep = delim)
+            clusters =  mappingDf[mappingColumns[0]].unique()
+            for cluster in clusters:
+                mappingDict[cluster] = mappingDf.loc[mappingDf[mappingColumns[0]] == cluster][mappingColumns[1]].unique()
+
             if output:
                 for cellType in mappingDict.keys():
                     targetList = [dirPath + ("'"+ + tag + ".bam'") for tag in mappingDict[cellType]]
@@ -86,12 +83,7 @@ def bamTagHanding(bamFile, threadNumber = 7, output = False, sortTarget = "CB", 
         for tempFile in tempFiles:
             if os.path.exists(tempFile):
                 os.remove(tempFile)
-        if len(mappingTagsMissing) == 0:
-            print("Following " + sortTarget + "tagged files not found in mapping")
-            for file in mappingTagsMissing:
-                os.rename(file, file[1,-2])
-                print(file)
-        
+        print(mappingTagsMissing)
     else:
         if output:
             pysam.samtools.split(bamFile, "-d", sortTarget, "-@", str(threadNumber), "-u", dirPath + "untagged.bam", "--output-fmt", "BAM", "-f", dirPath + (output + "_" + sortTarget + "%!.bam").replace("-", "_"), catch_stdout=False)
