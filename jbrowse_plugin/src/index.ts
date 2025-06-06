@@ -13,26 +13,26 @@ export default class AltSplicingPlugin extends Plugin {
   version = version
 
   install(pluginManager: PluginManager) {
-    // pluginManager.addViewType(() => {
-    //   return new ViewType({
-    //     name: 'HelloView',
-    //     stateModel: helloViewStateModel,
-    //     ReactComponent: HelloViewReactComponent,
-    //   })
-    // })
+    pluginManager.addViewType(() => {
+      return new ViewType({
+        name: 'HelloView',
+        stateModel: helloViewStateModel,
+        ReactComponent: HelloViewReactComponent,
+      })
+    })
 
     
   }
 
   configure(pluginManager: PluginManager) {
-  //   if (isAbstractMenuManager(pluginManager.rootModel)) {
-  //     pluginManager.rootModel.appendToMenu('Add', {
-  //       label: 'Hello View',
-  //       onClick: (session: AbstractSessionModel) => {
-  //         session.addView('HelloView', {})
+    if (isAbstractMenuManager(pluginManager.rootModel)) {
+      pluginManager.rootModel.appendToMenu('Add', {
+        label: 'Hello View',
+        onClick: (session: AbstractSessionModel) => {
+          session.addView('HelloView', {})
           
-  //       },
-  //     })
-  //   }
+        },
+      })
+    }
  }
 }
