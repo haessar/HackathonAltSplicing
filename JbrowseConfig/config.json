@@ -1,0 +1,32 @@
+{
+  "plugins": [
+    {
+      "name": "CustomBedPlugin",
+      "esmLoc": { "uri": "colorplugin.js" }
+    }
+  ],
+  "tracks": [
+    {
+      "type": "FeatureTrack",
+      "trackId": "my_track",
+      "name": "my track",
+      "assemblyNames": ["volvox"],
+      "adapter": {
+        "type": "BedAdapter",
+        "bedLocation": {
+          "uri": "volvox-bed12.bed"
+        }
+      },
+      "displays": [
+        {
+          "type": "LinearBasicDisplay",
+          "displayId": "mytrack-LinearBasicDisplay",
+          "renderer": {
+            "type": "SvgFeatureRenderer",
+            "color1": "jexl:colorFeature(feature)"
+          }
+        }
+      ]
+    }
+  ]
+}
