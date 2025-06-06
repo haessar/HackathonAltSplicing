@@ -54,6 +54,11 @@
     "@jbrowse/core": "^2.0.0"
   },
   "devDependencies": {
+    "@flatten-js/interval-tree": "^1.0.15",
+    "@gmod/bbi": "^7.0.0",
+    "@gmod/bed": "^2.1.2",
+    "@gmod/bgzf-filehandle": "^4.0.0",
+    "@gmod/tabix": "^3.0.1",
     "@babel/core": "^7.16.5",
     "@babel/preset-react": "^7.10.4",
     "@emotion/react": "^11.10.4",

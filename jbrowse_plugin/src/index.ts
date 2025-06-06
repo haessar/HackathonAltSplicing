@@ -7,7 +7,7 @@ import {
   ReactComponent as HelloViewReactComponent,
   stateModel as helloViewStateModel,
 } from './HelloView'
-import BedAdapterF from './BedAdapter'
+import BedAdapter2F from './BedAdapter'
 export default class AltSplicingPlugin extends Plugin {
   name = 'AltSplicingPlugin'
   version = version
@@ -20,9 +20,19 @@ export default class AltSplicingPlugin extends Plugin {
     //     ReactComponent: HelloViewReactComponent,
     //   })
     // })
-    BedAdapterF(pluginManager)
+    BedAdapter2F(pluginManager)
     
   }
 
-
+  configure(pluginManager: PluginManager) {
+  //   if (isAbstractMenuManager(pluginManager.rootModel)) {
+  //     pluginManager.rootModel.appendToMenu('Add', {
+  //       label: 'Hello View',
+  //       onClick: (session: AbstractSessionModel) => {
+  //         session.addView('HelloView', {})
+          
+  //       },
+  //     })
+  //   }
+ }
 }

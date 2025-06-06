@@ -1220,6 +1220,11 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.57.0.tgz#a5417ae8427873f1dd08b70b3574b453e67b5f7f"
   integrity sha512-Ys+3g2TaW7gADOJzPt83SJtCDhMjndcDMFVQ/Tj9iA1BfJzFKD9mAUXT3OenpuPHbI6P/myECxRJrofUsDx/5g==
 
+"@flatten-js/interval-tree@^1.0.15":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@flatten-js/interval-tree/-/interval-tree-1.1.3.tgz#7d9b4bb92042c6bbcefae5bbb822b5ec3c073e88"
+  integrity sha512-xhFWUBoHJFF77cJO1D6REjdgJEMRf2Y2Z+eKEPav8evGKcLSnj1ud5pLXQSbGuxF3VSvT1rWhMfVpXEKJLTL+A==
+
 "@floating-ui/core@^1.6.0":
   version "1.6.4"
   resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-1.6.4.tgz#0140cf5091c8dee602bff9da5ab330840ff91df6"
@@ -1247,6 +1252,27 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.4.tgz#1d459cee5031893a08a0e064c406ad2130cced7c"
   integrity sha512-dWO2pw8hhi+WrXq1YJy2yCuWoL20PddgGaqTgVe4cOS9Q6qklXCiA1tJEqX6BEwRNSCP84/afac9hd4MS+zEUA==
 
+"@gmod/abortable-promise-cache@^3.0.1":
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/@gmod/abortable-promise-cache/-/abortable-promise-cache-3.0.4.tgz#5ecb44e40cf128e9f44f7c25e1406facdcaede9b"
+  integrity sha512-kxRJj5fyRKFuZDp/YvnHeadYCV2EEUKyH2T4a2Iz9O7T/thOWWHUDiiD/Mg6WZP/RNNDIcfSHl/xVHHy/+j8qg==
+
+"@gmod/bbi@^7.0.0":
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/@gmod/bbi/-/bbi-7.0.3.tgz#8de63133dc5babed9477bba4d2c00bf4f75f9de0"
+  integrity sha512-p5xRVo++fGmysPp0bmZJJE6L0uFNsglFRk7tjjT2qwprd9RjwePO9ceWqxY0D3BKSxNUnAy0wAf2AixVWosS0Q==
+  dependencies:
+    "@gmod/abortable-promise-cache" "^3.0.1"
+    generic-filehandle2 "^2.0.1"
+    pako "^2.0.0"
+    quick-lru "^4.0.0"
+    rxjs "^7.8.0"
+
+"@gmod/bed@^2.1.2":
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/@gmod/bed/-/bed-2.1.7.tgz#e533ae0ac72e6fa957ea3a5a946654735f875b7c"
+  integrity sha512-ddxGWgcbI984gTdsIPbrFpM2h7s7kNWWKmxD+xKtv5N+Pe4RaoPdJ6nAc33QFkUjuM2s+3QIf81qjFLDVGhLsA==
+
 "@gmod/bgzf-filehandle@^1.4.3":
   version "1.4.7"
   resolved "https://registry.yarnpkg.com/@gmod/bgzf-filehandle/-/bgzf-filehandle-1.4.7.tgz#de2b1fbf2f56e15c31179bd42cd8bce7a8d1ada8"
@@ -1257,12 +1283,30 @@
     long "^4.0.0"
     pako "^1.0.11"
 
+"@gmod/bgzf-filehandle@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@gmod/bgzf-filehandle/-/bgzf-filehandle-4.0.0.tgz#2f0a37d225ea29b7a2d237813cdc38c192a6ca7b"
+  integrity sha512-phGO9zUj/Lj03UJWc1GXy5eOIuUrUGi4Wah6BJmKTsrfSESKkW6TJem4SJ5/H+iWcwldNcmmtqKbkR+Lr2yCCw==
+  dependencies:
+    generic-filehandle2 "^2.0.5"
+    pako "^1.0.11"
+
 "@gmod/http-range-fetcher@^3.0.0":
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@gmod/http-range-fetcher/-/http-range-fetcher-3.0.3.tgz#eda1c9f5f2399ce95e947e05c464d8f8f910b6a2"
   integrity sha512-VKFgGq+hBDNQzbyUgCLpNlzGJnHofUEUMyk9UX2dlNHpyif6mTXVAAAMs6cHI1z9L2bJTivZ23GyOvzaxEI8XQ==
   dependencies:
     abortcontroller-polyfill "^1.2.9"
+    quick-lru "^4.0.0"
+
+"@gmod/tabix@^3.0.1":
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/@gmod/tabix/-/tabix-3.0.5.tgz#4d8bcac9e962d4994adbc5d345189c325107e3fd"
+  integrity sha512-7q5oi1MXuAhyLPpPUbE8b1cqsfkAvkItdBspQ6aZQKQa2fDtW177QONoA0eoe6oWczJDagkH0EtXQTcx0m4m/g==
+  dependencies:
+    "@gmod/abortable-promise-cache" "^3.0.1"
+    "@gmod/bgzf-filehandle" "^4.0.0"
+    generic-filehandle2 "^2.0.1"
     quick-lru "^4.0.0"
 
 "@hapi/hoek@^9.0.0", "@hapi/hoek@^9.3.0":
@@ -5551,6 +5595,11 @@ fwd-stream@^1.0.4:
   dependencies:
     readable-stream "~1.0.26-4"
 
+generic-filehandle2@^2.0.1, generic-filehandle2@^2.0.5:
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/generic-filehandle2/-/generic-filehandle2-2.0.7.tgz#0165be9f09f181911c160d793fe2f1711bc947cf"
+  integrity sha512-CIH5A41LAy+swTaVxIOqY6B/gDulAUeDBFzc31E23BN/thgLK/Kum3E399KBqpe5D7Mo4oMZuKrhpqrefAZ1XA==
+
 generic-filehandle@^3.0.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/generic-filehandle/-/generic-filehandle-3.2.0.tgz#f65401ce71bccadb796335495c3d9250185876d4"
@@ -7746,6 +7795,11 @@ pako@^1.0.11:
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.11.tgz#6c9599d340d54dfd3946380252a35705a6b992bf"
   integrity sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==
 
+pako@^2.0.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/pako/-/pako-2.1.0.tgz#266cc37f98c7d883545d11335c00fbd4062c9a86"
+  integrity sha512-w+eufiZ1WuJYgPXbV/PO3NCMEc3xqylkKHzp8bxp1uW4qaSNQUkwmLLEc3kKsfz8lpV1F8Ht3U1Cm+9Srog2ug==
+
 parent-module@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/parent-module/-/parent-module-1.0.1.tgz#691d2709e78c79fae3a156622452d00762caaaa2"
@@ -8598,6 +8652,13 @@ rxjs@^7.5.1, rxjs@^7.8.1:
   version "7.8.1"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.8.1.tgz#6f6f3d99ea8044291efd92e7c7fcf562c4057543"
   integrity sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg==
+  dependencies:
+    tslib "^2.1.0"
+
+rxjs@^7.8.0:
+  version "7.8.2"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.8.2.tgz#955bc473ed8af11a002a2be52071bf475638607b"
+  integrity sha512-dhKf903U/PQZY6boNNtAGdWbG85WAbjT/1xYoZIC7FAY0yWapOBQVsVrDl58W86//e1VpMNBtRV4MaXfdMySFA==
   dependencies:
     tslib "^2.1.0"
 

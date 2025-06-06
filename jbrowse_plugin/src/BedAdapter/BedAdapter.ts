@@ -14,7 +14,7 @@ import { featureData } from '../MiscResources/util'
 import type { BaseOptions } from '@jbrowse/core/data_adapters/BaseAdapter'
 import type { Feature, Region } from '@jbrowse/core/util'
 
-export default class BedAdapter extends BaseFeatureDataAdapter {
+export default class BedAdapter2 extends BaseFeatureDataAdapter {
   protected bedFeatures?: Promise<{
     header: string
     features: Record<string, string[]>

@@ -5,8 +5,8 @@ import { ConfigurationSchema } from '@jbrowse/core/configuration'
  */
 function x() {} // eslint-disable-line @typescript-eslint/no-unused-vars
 
-const BedAdapter = ConfigurationSchema(
-  'BedAdapter',
+const BedAdapter2 = ConfigurationSchema(
+  'BedAdapter2',
   {
     /**
      * #slot
@@ -97,4 +97,4 @@ const BedAdapter = ConfigurationSchema(
     },
   },
 )
-export default BedAdapter
+export default BedAdapter2

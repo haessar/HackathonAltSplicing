@@ -4,7 +4,7 @@ import configSchema from './configSchema'
 
 import type PluginManager from '@jbrowse/core/PluginManager'
 
-export default function BedAdapterF(pluginManager: PluginManager) {
+export default function BedAdapter2F(pluginManager: PluginManager) {
   pluginManager.addAdapterType(
     () =>
       new AdapterType({
