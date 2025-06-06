@@ -7,7 +7,7 @@ import pathlib
 from pathlib import Path
 import pandas as pd
 
-def bamTagHanding(bamFile, threadNumber = 7, output = False, sortTarget = "CB", mapping = False, delim = "'", mappingColumns = ["Clusters", "cell_barcode"] ):
+def bamTagHanding(bamFile, threadNumber = 7, output = False, sortTarget = "CB", mapping = False, delim = ",", mappingColumns = ["Clusters", "cell_barcode"] ):
     # function takes unsorted bamFile and produces a split based upon tags
     # expected inputs:
     # bamFile: string of input file name 
