@@ -1,3 +1,5 @@
+#Preparing bam files to run regtools tests (not needed for final regtools_bed_by_celltype.py script)
+
 #Move to workdir
 cd /mnt/data/project0061/frances/
 

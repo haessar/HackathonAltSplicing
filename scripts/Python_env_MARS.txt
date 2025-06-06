@@ -1,0 +1,26 @@
+## Setup python3 virtual env and run regtools_bed_by_celltype.py on MARS
+## Workdir: /mnt/data/project0061/frances
+
+#Request interactive node on MARS
+srun -A none -J "Interactive-Job" --pty bash
+
+#Load python3 module
+module load apps/python3
+
+#Create virtual env
+python3 -m venv venv
+
+#Activate virtual env
+source venv/bin/activate
+
+#Install pysam
+pip install pysam
+
+#Install jupyter
+pip install jupyter
+
+#Convert jupyter notebook to python script
+jupyter nbconvert --to script regtools_bed_by_celltype.ipynb #This produces regtools_bed_by_celltype.py (also in scripts folder)
+
+#Run the script
+python3 regtools_bed_by_celltype.py
