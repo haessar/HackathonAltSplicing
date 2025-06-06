@@ -86,7 +86,12 @@ def bamTagHanding(bamFile, threadNumber = 7, output = False, sortTarget = "CB", 
         for tempFile in tempFiles:
             if os.path.exists(tempFile):
                 os.remove(tempFile)
-        print(mappingTagsMissing)
+        if len(mappingTagsMissing) == 0:
+            print("Following " + sortTarget + "tagged files not found in mapping")
+            for file in mappingTagsMissing:
+                os.rename(file, file[1,-2])
+                print(file)
+        
     else:
         if output:
             pysam.samtools.split(bamFile, "-d", sortTarget, "-@", str(threadNumber), "-u", dirPath + "untagged.bam", "--output-fmt", "BAM", "-f", dirPath + (output + "_" + sortTarget + "%!.bam").replace("-", "_"), catch_stdout=False)
