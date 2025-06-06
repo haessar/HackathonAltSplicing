@@ -1,5 +1,7 @@
 # HackathonAltSplicing
 
+![image](https://github.com/user-attachments/assets/dabbf3b5-d1a7-4c48-9037-ebe1668829bb)
+
 ## Contributing
 
 ### 🔖 Issue Labelling
