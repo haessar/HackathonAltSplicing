@@ -1,0 +1,50 @@
+{
+  "assemblies": [
+    {
+      "name": "volvox",
+      "sequence": {
+        "type": "ReferenceSequenceTrack",
+        "trackId": "volvox-ReferenceSequenceTrack",
+        "adapter": {
+          "type": "IndexedFastaAdapter",
+          "fastaLocation": {
+            "uri": "test_data/volvox.fa"
+          },
+          "faiLocation": {
+            "uri": "test_data/volvox.fa.fai"
+          }
+        }
+      }
+    }
+  ],
+  "plugins": [
+    {
+      "name": "CustomBedPlugin",
+      "esmLoc": { "uri": "index.js" }
+    }
+  ],
+  "tracks": [
+    {
+      "type": "FeatureTrack",
+      "trackId": "test_track",
+      "name": "test track",
+      "assemblyNames": ["volvox"],
+      "adapter": {
+        "type": "BedAdapter",
+        "bedLocation": {
+          "uri": "test_data/volvox-bed12.bed"
+        }
+      },
+      "displays": [
+        {
+          "type": "LinearBasicDisplay",
+          "displayId": "testtrack-LinearBasicDisplay",
+          "renderer": {
+            "type": "SvgFeatureRenderer",
+            "color1": "jexl:colorFeature(feature)"
+          }
+        }
+      ]
+    }
+  ]
+}
