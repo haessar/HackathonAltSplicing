@@ -1,8 +1,0 @@
-{
-  "plugins": [
-    {
-      "name": "AltSplicing",
-      "url": "http://localhost:9000/dist/jbrowse-plugin-alt-splicing.umd.development.js"
-    }
-  ]
-}

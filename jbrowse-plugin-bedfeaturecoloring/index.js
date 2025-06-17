@@ -1,22 +1,20 @@
 //attempts to add colorFeature function to jbrowse
 
-//function is never called, unsure why
-
-
 export default class CustomBedPlugin {
     name = 'CustomBedPlugin'
-    version = '0.0.1'
+
     install() {}
     configure(pluginManager) {
       pluginManager.jexl.addFunction('colorFeature', feature => {
-        let score= feature.get('score')
-        let colour= feature.get('itemRgb')
+        let score = feature.parentHandle.get('score')
+        let colour = feature.parentHandle.get('itemRgb')
         if (score && colour) {
-          return 'rgba(${colour}, ${score})'
+          const alpha = Math.max(0, Math.min(1, score / 1000))
+          return `rgba(${colour}, ${alpha})`
         }
         return 'red'
       })
-      
+
     }
 
   }
