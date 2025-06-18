@@ -9,6 +9,7 @@ description = "Python components of the HackathonAltSplicing repo"
 dependencies = [
     "pandas",
     "pysam",
+    "pyGenomeTracks",
 ]
 
 [project.optional-dependencies]
@@ -16,5 +17,5 @@ dev = ["pytest"]
 
 [tool.setuptools]
 package-dir = {"" = "src/python"}
-packages = ["bam_manipulation"]
+packages = ["bam_manipulation", "plotting"]
 
