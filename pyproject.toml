@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hackathonaltsplicing-python"
+version = "0.1.0"
+description = "Python components of the HackathonAltSplicing repo"
+dependencies = [
+    "pandas",
+    "pysam",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.setuptools]
+package-dir = {"" = "src/python"}
+packages = ["bam_manipulation"]
+
