@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# pylint: disable=no-member
 """
 Module: bam_isoform_tagger
 
