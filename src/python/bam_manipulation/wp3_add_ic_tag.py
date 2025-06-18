@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
+# pylint: disable=no-member
 import argparse
 import pysam
 
-def parse_args():
+def parse_args(argv=None):
     parser = argparse.ArgumentParser(description="WP3: Add isoform cluster ID tags to BAM reads")
     parser.add_argument("-i", "--input", required=True, help="Input BAM (coordinate‐sorted, indexed)")
     parser.add_argument("-o", "--output", required=True, help="Output BAM with IC tag")
     parser.add_argument("-c", "--cluster_file", required=False,
                         help="Optional TSV mapping read name → cluster ID; else use dummy logic")
-    return parser.parse_args()
+    return parser.parse_args(argv)
 
 def load_cluster_map(cluster_file):
     """
@@ -26,8 +27,8 @@ def load_cluster_map(cluster_file):
             cmap[read_name] = int(cid)
     return cmap
 
-def main():
-    args = parse_args()
+def main(argv=None):
+    args = parse_args(argv)
     bam_in = pysam.AlignmentFile(args.input, "rb")
     header = bam_in.header.to_dict()
 
@@ -73,4 +74,5 @@ def main():
     print(f"Written and indexed: {args.output}")
 
 if __name__ == "__main__":
-    main()
+    import sys
+    main(sys.argv[1:])

@@ -13,7 +13,6 @@ def plot_by_score(
     trackLabelFraction=0.2,
     dpi=130,
     width=38,
-    height=2,
     temp_ini="temp.ini"
 ):
     with open(temp_ini, "w") as f:
@@ -49,12 +48,3 @@ show_data_range = true
     ])
 
     print(f"✅ Plot saved to: {output_file}")
-
-
-if __name__ == "__main__":
-    # Example call
-    plot_by_score(
-        bed_file="volvox-bed12.bed",           
-        region="ctgA:1000-23000",
-        output_file="plot_by_score.png",
-    )

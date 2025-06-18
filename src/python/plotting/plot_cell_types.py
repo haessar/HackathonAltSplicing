@@ -56,15 +56,3 @@ height = 0.5
     ])
 
     print(f"✅ Plot saved to: {output_file}")
-
-
-if __name__ == "__main__":
-    plot_by_cell_type(
-        #list the bed files:
-        bed_files=["volvox-bed12.bed","volvox-bed12_1.bed", "volvox-bed12_2.bed", "volvox-bed12_3.bed"],     
-        #list the wanted region
-        region="ctgA:1000-25000",
-        output_file="celltype_plot.png",
-        #name the tissues denoted by BED files:
-        titles=["Tissue1", "Tissue2", "Tissue3", "Tissue4"]
-    )
