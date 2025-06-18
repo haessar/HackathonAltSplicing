@@ -13,7 +13,6 @@ def plot_by_score(
     trackLabelFraction=0.2,
     dpi=130,
     width=38,
-    height=2,
     temp_ini="temp.ini"
 ):
     with open(temp_ini, "w") as f:
