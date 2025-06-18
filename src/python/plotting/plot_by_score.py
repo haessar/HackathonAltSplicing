@@ -48,12 +48,3 @@ show_data_range = true
     ])
 
     print(f"✅ Plot saved to: {output_file}")
-
-
-if __name__ == "__main__":
-    # Example call
-    plot_by_score(
-        bed_file="volvox-bed12.bed",           
-        region="ctgA:1000-23000",
-        output_file="plot_by_score.png",
-    )
