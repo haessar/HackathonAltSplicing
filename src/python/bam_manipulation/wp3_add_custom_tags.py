@@ -132,7 +132,7 @@ def add_isoform_tags(input_bam, output_bam, cluster_map=None):
         sys.exit(f"Error indexing output BAM '{output_bam}': {e}")
 
 
-def parse_args():
+def parse_args(argv=None):
     """
     Parse command-line arguments for the script.
 
@@ -170,11 +170,11 @@ def parse_args():
         "--delimiter", default="\t",
         help="Column delimiter in TSV (default: tab)"
     )
-    return parser.parse_args()
+    return parser.parse_args(argv)
 
 
-def main():
-    args = parse_args()
+def main(argv=None):
+    args = parse_args(argv)
 
     try:
         cluster_map = load_cluster_map(
@@ -197,4 +197,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])
