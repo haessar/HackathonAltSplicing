@@ -1,3 +1,15 @@
+"""
+snakemake -p -n -j 10 -d /mnt/data/project0061 -C \
+        sample_id='Mira_1' \
+        bam='dario/Mira_1.sample.bam' \
+        gff='ref/schistosoma_mansoni.PRJEA36577.WBPS19.annotations.gff3' \
+        genome=ref/schistosoma_mansoni.PRJEA36577.WBPS19.genomic_softmasked.fa \
+        read_mode=single \
+        fragment_length=300 \
+        fragment_sd=100
+
+"""
+
 sample_id = config["sample_id"]
 
 os.makedirs("slurm", exist_ok=True)
@@ -17,7 +29,7 @@ def get_fastq(wildcards):
 
 rule all:
     input:
-        expand("kallisto/{sample_id}/read_transcripts.tsv.gz", sample_id=sample_id),
+        expand('wp3_add_ic_tag/{sample_id}.bam', sample_id=sample_id),
 
 
 rule stringtie:
@@ -109,6 +121,38 @@ rule read_to_transcripts_tsv:
         | gzip > {output.tsv}
         """
 
+
+rule tx_name_to_id:
+    input:
+        tsv="kallisto/{sample_id}/read_transcripts.tsv.gz",
+    output:
+        tsv="kallisto/{sample_id}/clusters.tsv",
+    shell:
+        r"""
+cat <<'EOF' > {rule}.$$.tmp.R
+library(data.table)
+
+tx <- fread('{input.tsv}')
+tx[, cluster_id := as.numeric(as.factor(transcript_id))]
+fwrite(x=tx[, list(`#read_id`, cluster_id)], file='{output.tsv}', col.names=FALSE, sep='\t')
+EOF
+Rscript {rule}.$$.tmp.R
+rm {rule}.$$.tmp.R
+       """
+
+rule add_ic_tag:
+    input:
+        tsv="kallisto/{sample_id}/clusters.tsv",
+        bam=config['bam']
+    output:
+        bam='wp3_add_ic_tag/{sample_id}.bam',
+    shell:
+        r"""
+        {workflow.basedir}/../src/python/bam_manipulation/wp3_add_ic_tag.py \
+            -i {input.bam} \
+            -c {input.tsv} \
+            -o {output.bam}
+        """
 
 # rule kallisto_sort:
 #     input:
