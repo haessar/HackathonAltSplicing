@@ -1,9 +1,12 @@
+# pylint: disable=no-member
 import pysam
 import pysam.samtools
 import os
 import os.path
 from pathlib import Path
 import pandas as pd
+from tqdm import tqdm
+from collections import defaultdict
 
 
 def bamTagHandling(bamFile, threadNumber = 7, output = False, sortTarget = "CB", mapping = False, delim = ",", mappingColumns = ["Cluster", "cell_barcode"] ):
@@ -32,9 +35,9 @@ def bamTagHandling(bamFile, threadNumber = 7, output = False, sortTarget = "CB",
     if not os.path.exists(dirPath):
         os.makedirs(dirPath)
     if mapping:
-        mappingTagsMissing = []
-        pysam.samtools.split(bamFile, "-d", sortTarget, "-@", str(threadNumber), "-u", dirPath + "untagged.bam", "--output-fmt", "BAM", "-f", dirPath + ("'" + "%!.bam'"), catch_stdout=False)
-        tempFiles = []
+        # mappingTagsMissing = []
+        # pysam.samtools.split(bamFile, "-d", sortTarget, "-@", str(threadNumber), "-u", dirPath + "untagged.bam", "--output-fmt", "BAM", "-f", dirPath + "%!.bam", catch_stdout=False)
+        # tempFiles = []
         if isinstance(mapping, dict):
             mappingDict = mapping.copy()
         else:
@@ -44,23 +47,74 @@ def bamTagHandling(bamFile, threadNumber = 7, output = False, sortTarget = "CB",
             for cluster in clusters:
                 mappingDict[cluster] = mappingDf.loc[mappingDf[mappingColumns[0]] == cluster][mappingColumns[1]].unique()
 
-        for cellType, tags in mappingDict.items():
-            outFile = cellType.replace(" ", "_") + ".bam"
-            if output:
-                outFile = output + "_" + outFile
-            targetList = [dirPath + ("'" + tag + ".bam'")  for tag in tags]
-            tempFiles.extend(targetList)
-            presentList = [tag for tag in targetList if Path(tag).is_file()]
-            mappingTagsMissing.extend(list(set(targetList)- set(presentList)))
-            if len(presentList) > 0:
-                pysam.merge("-f", "-@", str(threadNumber), "-o", dirPath + outFile, *presentList)
-        for tempFile in tempFiles:
-            if os.path.exists(tempFile):
-                os.remove(tempFile)
-        if len(mappingTagsMissing) > 0:
-            mappingTagsMissing = [tagNotPresent.split("/")[-1].strip("'")[0:-4] for tagNotPresent in mappingTagsMissing]
-            print("Following labelled cells missing in data ")
-            print(mappingTagsMissing)
+        # count = 0
+        # with pysam.AlignmentFile(bamFile, "rb") as in_bam:
+        #     for read in in_bam:
+        #         cb_tag = read.get_tag("CB") if read.has_tag("CB") else None
+        #         if cb_tag:
+        #             filter = mappingDf[mappingDf["cell_barcode"] == cb_tag]
+        #             if not filter.empty:
+        #                 count += 1
+
+        tag_to_cellType = {tag: ct for ct, tags in mappingDict.items() for tag in tags}
+
+        # for cellType, tags in mappingDict.items():
+        #     in_bam = pysam.AlignmentFile(bamFile, "rb")
+        #     outFile = cellType.replace(" ", "_") + ".bam"
+        #     if output:
+        #         outFile = output + "_" + outFile
+        #     with pysam.AlignmentFile(outFile, "wb", header=in_bam.header) as out_bam:
+        #         count = 0
+        #         for tag in tags:
+        #             for read in in_bam:
+        #                 if read.has_tag("CB") and read.get_tag("CB") == tag:
+        #                     count += 1
+        #                     out_bam.write(read)
+        #     print(f"{outFile}: {count}")
+
+        with pysam.AlignmentFile(bamFile, "rb") as in_bam:
+            total_reads = sum(total_count for _, _, _, total_count in in_bam.get_index_statistics())
+            # We will open each cell-type BAM the first time we need it
+            out_handles = {}
+            counts = defaultdict(int)
+
+            for read in tqdm(in_bam, total=total_reads):
+                if not read.has_tag(sortTarget):
+                    continue
+                tag = read.get_tag(sortTarget)
+
+                if tag not in tag_to_cellType:
+                    continue
+
+                cellType = tag_to_cellType[tag]
+                if cellType not in out_handles:  # lazily create handle
+                    outFile = cellType.replace(" ", "_") + ".bam"
+                    if output:
+                        outFile = output + "_" + outFile
+                    out_handles[cellType] = pysam.AlignmentFile(dirPath + outFile, "wb",
+                                                        header=in_bam.header)
+                out_handles[cellType].write(read)
+                counts[cellType] += 1
+
+        # close everything and report
+        for h in out_handles.values():
+            h.close()
+
+        for cellType, n in counts.items():
+            print(f"{cellType} : {n} reads")
+            # targetList = [dirPath + ("'" + tag + ".bam'")  for tag in tags]
+            # tempFiles.extend(targetList)
+            # presentList = [tag for tag in targetList if Path(tag).is_file()]
+            # mappingTagsMissing.extend(list(set(targetList)- set(presentList)))
+            # if len(presentList) > 0:
+            #     pysam.merge("-f", "-@", str(threadNumber), "-o", dirPath + outFile, *presentList)
+        # for tempFile in tempFiles:
+        #     if os.path.exists(tempFile):
+        #         os.remove(tempFile)
+        # if len(mappingTagsMissing) > 0:
+        #     mappingTagsMissing = [tagNotPresent.split("/")[-1].strip("'")[0:-4] for tagNotPresent in mappingTagsMissing]
+        #     print("Following labelled cells missing in data ")
+        #     print(mappingTagsMissing)
         
     else:
         if output:
