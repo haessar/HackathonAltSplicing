@@ -36,6 +36,7 @@ def bamTagHandling(bamFile, threadNumber = 7, output = False, sortTarget = "CB",
         os.makedirs(dirPath)
     if mapping:
         # mappingTagsMissing = []
+        presentSet = {}
         # pysam.samtools.split(bamFile, "-d", sortTarget, "-@", str(threadNumber), "-u", dirPath + "untagged.bam", "--output-fmt", "BAM", "-f", dirPath + "%!.bam", catch_stdout=False)
         # tempFiles = []
         if isinstance(mapping, dict):
@@ -86,6 +87,7 @@ def bamTagHandling(bamFile, threadNumber = 7, output = False, sortTarget = "CB",
                 if tag not in tag_to_cellType:
                     continue
 
+                presentSet.add(tag)
                 cellType = tag_to_cellType[tag]
                 if cellType not in out_handles:  # lazily create handle
                     outFile = cellType.replace(" ", "_") + ".bam"
@@ -102,6 +104,7 @@ def bamTagHandling(bamFile, threadNumber = 7, output = False, sortTarget = "CB",
 
         for cellType, n in counts.items():
             print(f"{cellType} : {n} reads")
+        print(f"% of mapping tags found in BAM: {round(100 * len(presentSet) / len(mappingDf), 2)}")
             # targetList = [dirPath + ("'" + tag + ".bam'")  for tag in tags]
             # tempFiles.extend(targetList)
             # presentList = [tag for tag in targetList if Path(tag).is_file()]
