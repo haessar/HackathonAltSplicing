@@ -36,7 +36,7 @@ def bamTagHandling(bamFile, threadNumber = 7, output = False, sortTarget = "CB",
         os.makedirs(dirPath)
     if mapping:
         # mappingTagsMissing = []
-        presentSet = {}
+        presentSet = set()
         # pysam.samtools.split(bamFile, "-d", sortTarget, "-@", str(threadNumber), "-u", dirPath + "untagged.bam", "--output-fmt", "BAM", "-f", dirPath + "%!.bam", catch_stdout=False)
         # tempFiles = []
         if isinstance(mapping, dict):
