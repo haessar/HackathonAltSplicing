@@ -9,7 +9,7 @@ from tqdm import tqdm
 from collections import defaultdict
 
 
-def bamTagHandling(bamFile, threadNumber = 7, output = False, sortTarget = "CB", mapping = False, delim = ",", mappingColumns = ["Cluster", "cell_barcode"] ):
+def bamTagHandling(bamFile, threadNumber = 7, output = False, sortTarget = "CB", mapping = False, delim = ",", mappingColumns = ["Cluster", "cell_barcode"], untagged = False, unmapped = False ):
     '''
     # function takes unsorted bamFile and produces a split based upon tags
     # expected inputs:
@@ -24,6 +24,8 @@ def bamTagHandling(bamFile, threadNumber = 7, output = False, sortTarget = "CB",
     # Without mapping file split file based upon tag of form (output_) sortTarget value of tag.bam
     # If mapping file is used final outputs will be of form (output_) grouping.bam 
     # will place results in directory named output
+    # untagged: capture reads that don't contain a tag sortTarget in untagged.bam (default False)
+    # unmapped: capture reads that do contain a tag sortTarget but not matched in mapping (default False)
     '''
     if output:
         directoryName = output+ "_files"
@@ -49,13 +51,25 @@ def bamTagHandling(bamFile, threadNumber = 7, output = False, sortTarget = "CB",
             # We will open each cell-type BAM the first time we need it
             out_handles = {}
             counts = defaultdict(int)
+            untagged_count = 0
+            unmapped_count = 0
 
+            if untagged:
+                untagged_bam = pysam.AlignmentFile(dirPath + "untagged.bam", "wb", header=in_bam.header)
+            if unmapped:
+                unmapped_bam = pysam.AlignmentFile(dirPath + "unmapped.bam", "wb", header=in_bam.header)
             for read in tqdm(in_bam, total=total_reads):
                 if not read.has_tag(sortTarget):
+                    untagged_count += 1
+                    if untagged:
+                        untagged_bam.write(read)
                     continue
                 tag = read.get_tag(sortTarget)
 
                 if tag not in tag_to_cellType:
+                    unmapped_count += 1
+                    if unmapped:
+                        unmapped_bam.write(read)
                     continue
 
                 presentSet.add(tag)
@@ -72,10 +86,16 @@ def bamTagHandling(bamFile, threadNumber = 7, output = False, sortTarget = "CB",
         # close everything and report
         for h in out_handles.values():
             h.close()
+        if untagged:
+            untagged_bam.close()
+        if unmapped:
+            unmapped_bam.close()
 
         for cellType, n in counts.items():
             print(f"{cellType} : {n} reads")
         print(f"% of mapping tags found in BAM: {round(100 * len(presentSet) / len(mappingDf), 2)}")
+        print(f'% of reads without a "{sortTarget}" tag: {round(100 * untagged_count / total_reads, 2)}')
+        print(f'% of tagged reads without a mapping: {round(100 * unmapped_count / (total_reads - untagged_count), 2)}')
         
     else:
         if output:
