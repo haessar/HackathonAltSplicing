@@ -1,0 +1,24 @@
+{
+  "name": "@haessar/jbrowse-plugin-bedfeaturecoloring",
+  "version": "1.0.3",
+  "description": "Use more display options when rendering BED files",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haessar/HackathonAltSplicing.git"
+  },
+  "keywords": [
+    "bed"
+  ],
+  "author": "William Haese-Hill <wahhill@gmail.com",
+  "contributors": [
+    "Toby Weir <tobyweir3@gmail.com>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/haessar/HackathonAltSplicing/issues"
+  },
+  "homepage": "https://github.com/haessar/HackathonAltSplicing#readme",
+  "files": ["test_data", "test_config.json", "index.js"],
+  "type": "module"
+}
