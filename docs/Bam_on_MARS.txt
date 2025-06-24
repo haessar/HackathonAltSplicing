@@ -1,0 +1,24 @@
+#Preparing bam files to run regtools tests (not needed for final regtools_bed_by_celltype.py script)
+
+#Move to workdir
+cd /mnt/data/project0061/frances/
+
+#Request interactive node on MARS
+srun -A none -J "Interactive-Job" --pty bash
+
+#Install samtools
+wget https://github.com/samtools/samtools/releases/download/1.22/samtools-1.22.tar.bz2
+bzip2 -d samtools-1.22.tar.bz2
+tar -xvf samtools-1.22.tar
+./configure --without-curses --prefix=/mnt/data/project0061/frances/
+make
+make install
+
+#Make sym-link to one of the project BAM files
+ln -s ../bam_manipulation/published/cellranger_count_Sm/Mira_1/outs/possorted_genome_bam.bam .
+
+#Sub-sample the BAM file to include 1% of the reads
+/mnt/data/project0061/frances/bin/samtools view -b -s 0.01 possorted_genome_bam.bam > sub1_possorted_genome_bam.bam
+
+#Index the sub-sampled BAM file
+/mnt/data/project0061/frances/bin/samtools index sub1_possorted_genome_bam.bam

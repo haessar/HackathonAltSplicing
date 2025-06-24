@@ -1,0 +1,21 @@
+#Install and test regtools on MARS
+
+#Move to workdir
+cd /mnt/data/project0061/frances/
+
+#Request interactive node on MARS
+srun -A none -J "Interactive-Job" --pty bash
+
+#Install regtools
+git clone https://github.com/griffithlab/regtools
+cd regtools/
+mkdir build
+cd build/
+cmake ..
+make
+
+#Check installation worked
+regtools/build/regtools --help
+
+#Run regtools junctions
+regtools/build/regtools junctions extract sub1_possorted_genome_bam.bam -s XS -o output.junctions.bed
