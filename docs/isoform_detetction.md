@@ -27,6 +27,7 @@ Starting from a reference genome and paired fastq. Steps:
 ```
 conda create -n HackathonAltSplicing
 conda activate HackathonAltSplicing
+conda config --add channels bioconda
 conda install --file requirements.txt --yes
 ```
 
