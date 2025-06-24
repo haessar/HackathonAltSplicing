@@ -5,13 +5,16 @@
 # 
 # Uses Python env 'venv', see scripts/Python_env_MARS.txt
 
-# In[1]:
+# In[ ]:
 
 
 import os
 import colorsys
+from glob import glob
 import pysam
 import pysam.samtools
+
+BASE_DIR = "/mnt/data/project0061"
 
 
 # In[ ]:
@@ -19,9 +22,10 @@ import pysam.samtools
 
 # Loop through BAM files in a directory and extract cell types
 #Assuming BAM files are named like "celltype_sample.bam"
-BAM_DIR = os.environ.get('BAM_DIR', '/mnt/data/project0061/frances/bam_dir')
+BAM_DIR = os.environ.get('BAM_DIR', f'{BASE_DIR}/bam_dir/')
 bam_files = [f for f in os.listdir(BAM_DIR) if f.endswith('.bam')]
-celltypes = [f.split('_')[2] for f in bam_files] #Celltype not currently consistent- sometimes multiple '_' in name
+#Assume BAM_DIR will contain bam files that are pre-merged for each cell type (e.g. [Stem_C.bam, Stem_D.bam, ...])
+celltypes = [f.split('.')[0] for f in bam_files]
 print(celltypes)
 
 
@@ -41,12 +45,12 @@ print(celltype_colors)
 
 # Run regtools to generate BED files with splice junctions for each BAM file
 for bam_file in bam_files:
-    celltype = bam_file.split('_')[2]
+    celltype = bam_file.split('.')[0]
     bam_path = os.path.join(BAM_DIR, bam_file)
     bed_file = os.path.splitext(bam_file)[0] + ".junctions.bed"
     bed_path = os.path.join(BAM_DIR, bed_file)
     # Run regtools junctions extract
-    os.system(f"/mnt/data/project0061/frances/regtools/build/regtools junctions extract -s XS {bam_path} -o {bed_path}")
+    os.system(f"{BASE_DIR}/regtools/build/regtools junctions extract -s XS {bam_path} -o {bed_path}")
 
 
 # In[ ]:
@@ -54,7 +58,7 @@ for bam_file in bam_files:
 
 # Edit column 8 of each BED file to have the specific RGB code for the celltype and append .rgb to the bed file name
 for bam_file in bam_files:
-    celltype = bam_file.split('_')[2]
+    celltype = bam_file.split('.')[0]
     rgb = ','.join(map(str, celltype_colors.get(celltype, (0, 0, 0))))  # Default to black if not found
     bed_file = os.path.splitext(bam_file)[0] + ".junctions.bed"
     if not os.path.exists(bed_path):
@@ -69,6 +73,8 @@ for bam_file in bam_files:
             while len(fields) < 9:
                 fields.append('.')
             fields[8] = rgb
+            # Prefix name column with the celltype
+            fields[3] = celltype + "_" + fields[3]
             outfile.write('\t'.join(fields) + '\n')
 
 
@@ -76,7 +82,7 @@ for bam_file in bam_files:
 
 
 # Concatenate all .junctions.bed.rgb files into a single file
-rgb_bed_files = [os.path.join(BAM_DIR, os.path.splitext(f)[0] + ".junctions.bed.rgb") for f in bam_files]
+rgb_bed_files = glob(f"{BAM_DIR}/*.junctions.bed.rgb")
 concatenated_bed_path = os.path.join(BAM_DIR, "all_celltypes.junctions.bed.rgb")
 
 with open(concatenated_bed_path, 'w') as outfile:
