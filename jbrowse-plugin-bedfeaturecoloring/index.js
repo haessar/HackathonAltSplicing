@@ -9,7 +9,7 @@ export default class CustomBedPlugin {
         let score = feature.parentHandle.get('score')
         let colour = feature.parentHandle.get('itemRgb')
         if (score && colour) {
-          const alpha = Math.max(0, Math.min(1, score / 1000))
+          const alpha = Math.max(0, Math.min(1, score / 100))
           return `rgba(${colour}, ${alpha})`
         }
         return 'red'

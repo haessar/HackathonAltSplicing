@@ -1,6 +1,6 @@
 {
   "name": "@haessar/jbrowse-plugin-bedfeaturecoloring",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Use more display options when rendering BED files",
   "main": "index.js",
   "repository": {
