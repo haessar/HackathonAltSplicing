@@ -67,8 +67,6 @@ rule kallisto_index:
         idx="kallisto/{sample_id}.idx",
     conda:
         "env/kallisto.yml"
-    resources:
-        mem_mb=10000
     shell:
         r"""
         kallisto index -i {output.idx} {input.fa}
