@@ -27,6 +27,7 @@ Starting from a reference genome and paired fastq. Steps:
 ```
 conda create -n HackathonAltSplicing
 conda activate HackathonAltSplicing
+conda config --add channels bioconda
 conda install --file requirements.txt --yes
 ```
 
@@ -42,7 +43,7 @@ snakemake -n -p -j 10 -C \
         fragment_length=300 \
         fragment_sd=100 \
     --executor slurm \
-    --configfile config/snakemake.yaml \
+    --profile profile/ \
     --latency-wait 60 \
     -d /mnt/data/project0061 \
     --use-conda
