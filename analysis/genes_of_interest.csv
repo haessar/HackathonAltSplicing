@@ -1,0 +1,13 @@
+"Gene Name","Gene ID","Genomic Coordinates","Notes"
+"Tropomyosin−1","Smp_340760","SM_V10_1:84523665..84554018","Most striking example. Has two very different isoforms (they share just one exon and differ by TSS and several internal exons) with one being almost exclusively expressed muscle and another used in other tissues. This is consistent with observations in other organisms"
+"Talin","Smp_343540","SM_V10_1:52355875..52546630","Second exon is skipped in some stem cells"
+"Synaptosomal−associated protein","Smp_034120","SM_V10_1:36299754..36314140","The 49nt 3rd exon is used in neurons (accompanied by higher expression of the gene) while an unannotated transcript, missing the exon, is more abundant in muscles and is major isoform in stem cells"
+"LIM zinc-binding domain-containing protein","Smp_125730","SM_V10_1:35349652..35405274","Two consecutive exons are with earlier transcript end. The gene is mostly expressed in muscle where longer (exon-skipping) isoform is used. Expression in other cell types is lower, with variable fraction of shorter isoform which is dominant in stem cells."
+"Putative slit−robo rho gtpase activating protein","Smp_028030","SM_V10_1:48416337..48509220","An exon is preferably skipped in females but mostly included in males. The event is significant in Parenchyma_1, but also detectable in Neuron_2 and Stem_3_somatic"
+"Tudor domain protein","Smp_175680","SM_V10_1:47671967..47695730","Missed isoforms. Exon skipped in Neuron 2 population"
+"Adducin related","Smp_083040","SM_V10_1:58080135..58113063","Large exon skipped in muscle"
+"Splicing factor U2AF subunit","Smp_019690","SM_V10_Z:29514214..29516816","Alternative acceptor site in 5’UTR (gene is on minus strand), results in 21nt extension of presumably 5’UTR. Males mostly express shorter isoform, females prefer longer one. There might be some self-regulation as gene encodes splicing factor"
+"Mitochondrial translocase Tim 21","Smp_093800","SM_V10_Z:47263356..47280773","An exon completely skipped in a single stem cell population and skipped at high frequency in several other stem populations"
+"Ribosomal protein S28","Smp_022850","SM_V10_Z:19625953..19635985","Shorter isoform used in 2 neuronal populations. Internal exon skipped in approx. 50% of stem E population."
+"ER protein","Smp_175660","SM_V10_7:3385736..3408233","Exon skipped in tegument population"
+

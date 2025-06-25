@@ -1,0 +1,9 @@
+genes_of_interest.csv	- Emerged via analysis of the outputs from the pipeline https://github.com/cellgeni/nf-scsajr applied to Schistosoma mansoni
+			- Can be used as cues for finding visual interest in any outputs we produce
+			- Use command `column -s, -t < genes_of_interest.csv | less -#2 -N -S` for "pretty print" in console 
+
+cc_barcode_Mira_*.csv	- extracted from cc_barcode.csv with following mapping:
+			sample1 -> Mira_1
+			sample2 -> Mira_3
+			sample3 -> Mira_4
+			sample4 -> Mira_2
