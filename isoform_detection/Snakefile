@@ -29,8 +29,7 @@ def get_fastq(wildcards):
 
 rule all:
     input:
-        # expand('wp3_add_ic_tag/{sample_id}.bam', sample_id=sample_id),
-        expand('stringtie/{sample_id}.gtf', sample_id=sample_id),
+        expand('wp3_add_ic_tag/{sample_id}.bam', sample_id=sample_id),
 
 
 rule stringtie:
