@@ -13,13 +13,14 @@ parser.add_argument(
 )
 parser.add_argument("--gtf", "-g", help="GTF file, typically from stringtie")
 parser.add_argument(
-    "--nh",
-    "-nh",
-    help="Keep reads where NH (number of hits) tag is no more than this [%(default)s]",
-    default=1,
-    type=int,
+    "--prob-assignment",
+    "-p",
+    help="Keep reads where the ZW tag (posterior probability of assignment) is at least this much [%(default)s]",
+    default=0.8,
+    type=float,
 )
-
+parser.add_argument('--version', '-v', action='version',
+                    version='%(prog)s 0.2.0')
 args = parser.parse_args()
 
 tx2gene = {}
@@ -44,8 +45,8 @@ with open(args.gtf) as gtf:
             tx2gene[tx_id] = gene_id
 
 sam = pysam.AlignmentFile(args.bam)
-print("\t".join(["#read_id", "transcript_id", "gene_id"]))
+print("\t".join(["#read_id", "transcript_id", "gene_id", "prob_assignment_zw"]))
 for aln in sam:
-    if aln.has_tag("NH") and aln.get_tag("NH") <= args.nh:
-        out = [aln.query_name, aln.reference_name, tx2gene[aln.reference_name]]
+    if aln.has_tag("ZW") and aln.get_tag("ZW") >= args.prob_assignment:
+        out = [aln.query_name, aln.reference_name, tx2gene[aln.reference_name], str(aln.get_tag("ZW"))]
         print("\t".join(out))

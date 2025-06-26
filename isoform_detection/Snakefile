@@ -29,7 +29,8 @@ def get_fastq(wildcards):
 
 rule all:
     input:
-        expand('wp3_add_ic_tag/{sample_id}.bam', sample_id=sample_id),
+        # expand('wp3_add_ic_tag/{sample_id}.bam', sample_id=sample_id),
+        expand('stringtie/{sample_id}.gtf', sample_id=sample_id),
 
 
 rule stringtie:
@@ -153,59 +154,3 @@ rule add_ic_tag:
             -c {input.tsv} \
             -o {output.bam}
         """
-
-# rule kallisto_sort:
-#     input:
-#         bam='kallisto/{sample_id}/pseudoalignments.bam',
-#     output:
-#         bam='kallisto/{sample_id}/pseudoalignments.sort.bam',
-#     shell:
-#         r"""
-#         samtools sort -@ 8 {input.bam} > {output.bam}
-#         """
-#
-#
-# rule index_bam:
-#     input:
-#         bam='kallisto/{sample_id}/pseudoalignments.sort.bam',
-#     output:
-#         bam='kallisto/{sample_id}/pseudoalignments.sort.bam.bai',
-#     shell:
-#         r"""
-#         samtools index -@ 8 {input.bam}
-#         """
-#
-#
-# rule bwa_index:
-#     input:
-#         fa='stringtie/{sample_id}.fa',
-#     output:
-#         idx='stringtie/{sample_id}.fa.bwt',
-#
-# rule bwa_mem:
-#     input:
-#         fa='stringtie/{sample_id}.fa',
-#         idx='stringtie/{sample_id}.fa.bwt',
-#         fq=['data/fastq/ERR11178264_1.fastq.gz', 'data/fastq/ERR11178264_2.fastq.gz'],
-#     output:
-#         bam='bwa/{sample_id}.bam',
-#     shell:
-#         r"""
-#         bwa mem -t 24 {input.fa} {input.fq} \
-#         | samtools view -b > {output.bam}
-#         """
-#
-#
-# rule download:
-#    output:
-#        "ref/schistosoma_mansoni.PRJEA36577.WBPS19.genomic_softmasked.fa",
-#        "schistosoma_mansoni.PRJEA36577.WBPS19.annotations.gff3",
-#    shell:
-#        r"""
-#        cd ref
-#        wget https://ftp.ebi.ac.uk/pub/databases/wormbase/parasite/releases/WBPS19/species/schistosoma_mansoni/PRJEA36577/schistosoma_mansoni.PRJEA36577.WBPS19.genomic_softmasked.fa.gz
-#        wget https://ftp.ebi.ac.uk/pub/databases/wormbase/parasite/releases/WBPS19/species/schistosoma_mansoni/PRJEA36577/schistosoma_mansoni.PRJEA36577.WBPS19.annotations.gff3.gz
-#        gunzip schistosoma_mansoni.PRJEA36577.WBPS19.genomic_softmasked.fa.gz
-#        gunzip schistosoma_mansoni.PRJEA36577.WBPS19.annotations.gff3.gz
-#        samtools faidx ref/schistosoma_mansoni.PRJEA36577.WBPS19.genomic_softmasked.fa
-#        """
