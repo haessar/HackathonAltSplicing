@@ -28,7 +28,7 @@ The following template `config.json` shows how to define a custom BED `FeatureTr
   "plugins": [
     {
       "name": "BedFeatureColoring",
-      "url": "https://unpkg.com/@haessar/jbrowse-plugin-bedfeaturecoloring"
+      "esmLoc": { "uri": "https://unpkg.com/@haessar/jbrowse-plugin-bedfeaturecoloring" }
     }
   ],
   "assemblies": [...],

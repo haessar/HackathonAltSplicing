@@ -7,3 +7,8 @@ cc_barcode_Mira_*.csv	- extracted from cc_barcode.csv with following mapping:
 			sample2 -> Mira_3
 			sample3 -> Mira_4
 			sample4 -> Mira_2
+
+jbrowse_env/			- Contains small demo files and a config.json for launching JBrowse 2 with jbrowse-plugin-bedfeaturecoloring installed. Due to file size constraints I've only included two of the smaller tagged BAM files. To repeat the full analysis, copy over more BAM files into jbrowse-env/ and add them as additional tracks to the config.json.
+			- Launch jbrowse-web locally on port 3000 (default)
+			- Navigate to jbrowse-env/ and run command `npx serve . --cors -p 3001`
+			- Navigate to the following URL: http://localhost:3000/?config=http://localhost:3001/config.json

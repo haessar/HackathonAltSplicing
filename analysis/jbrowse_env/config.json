@@ -1,0 +1,189 @@
+{
+	"plugins": [
+    {
+      "name": "BedFeatureColoring",
+      "esmLoc": { "uri": "https://unpkg.com/@haessar/jbrowse-plugin-bedfeaturecoloring" }
+    }
+  ],
+  "assemblies": [
+    {
+      "name": "SM_V10_1",
+      "sequence": {
+        "type": "ReferenceSequenceTrack",
+        "trackId": "SM_V10_1-32021",
+        "adapter": {
+          "type": "IndexedFastaAdapter",
+          "fastaLocation": {
+            "locationType": "UriLocation",
+            "uri": "SM_V10_1.fasta"
+          },
+          "faiLocation": {
+            "locationType": "UriLocation",
+            "uri": "SM_V10_1.fasta.fai"
+          }
+        },
+        "displays": [
+          {
+            "type": "LinearReferenceSequenceDisplay",
+            "displayId": "SM_V10_1-32021-LinearReferenceSequenceDisplay"
+          },
+          {
+            "type": "LinearGCContentDisplay",
+            "displayId": "SM_V10_1-32021-LinearGCContentDisplay"
+          }
+        ]
+      }
+    }
+  ],
+	"tracks": [
+    {
+      "type": "FeatureTrack",
+      "trackId": "sm_genes_of_interest.gff3",
+      "name": "SM_genes_of_interest.gff3",
+      "assemblyNames": [
+        "SM_V10_1"
+      ],
+      "adapter": {
+        "type": "Gff3Adapter",
+        "gffLocation": {
+          "locationType": "UriLocation",
+          "uri": "SM_genes_of_interest.gff3"
+        }
+      },
+      "displays": [
+        {
+          "type": "LinearBasicDisplay"
+        },
+        {
+          "type": "LinearArcDisplay"
+        }
+      ]
+    },
+		{
+			"type": "FeatureTrack",
+			"trackId": "all_samples_all_celltypes.junctions.bed.rgb",
+			"name": "all_samples_all_celltypes.junctions.bed.rgb",
+			"assemblyNames": [
+			  "SM_V10_1"
+			],
+			"adapter": {
+			  "type": "BedAdapter",
+			  "bedLocation": {
+			    "locationType": "UriLocation",
+			    "uri": "all_samples_all_celltypes.junctions.bed.rgb"
+			  }
+			},
+			"displays": [
+			  {
+			    "type": "LinearBasicDisplay",
+			    "renderer": {
+						"type": "SvgFeatureRenderer",
+						"color1": "jexl:colorFeature(feature)"
+			    }
+			  },
+			  {
+			    "type": "LinearArcDisplay"
+			  }
+			]
+		},
+    {
+      "type": "AlignmentsTrack",
+      "trackId": "neuron_5.bam",
+      "name": "Neuron_5.bam",
+      "assemblyNames": [
+        "SM_V10_1"
+      ],
+      "adapter": {
+        "type": "BamAdapter",
+        "bamLocation": {
+          "locationType": "UriLocation",
+          "uri": "Neuron_5.bam"
+        },
+        "index": {
+          "location": {
+            "locationType": "UriLocation",
+            "uri": "Neuron_5.bam.bai"
+          }
+        },
+        "sequenceAdapter": {
+          "type": "IndexedFastaAdapter",
+          "fastaLocation": {
+            "locationType": "UriLocation",
+            "uri": "SM_V10_1.fasta"
+          },
+          "faiLocation": {
+            "locationType": "UriLocation",
+            "uri": "SM_V10_1.fasta.fai"
+          }
+        }
+      },
+      "displays": [
+        {
+          "type": "LinearAlignmentsDisplay"
+        },
+        {
+          "type": "LinearPileupDisplay"
+        },
+        {
+          "type": "LinearSNPCoverageDisplay"
+        },
+        {
+          "type": "LinearReadArcsDisplay"
+        },        
+        {
+          "type": "LinearReadCloudDisplay"
+        }
+      ]
+    },
+    {
+      "type": "AlignmentsTrack",
+      "trackId": "stem_g.bam",
+      "name": "Stem_G.bam",
+      "assemblyNames": [
+        "SM_V10_1"
+      ],
+      "adapter": {
+        "type": "BamAdapter",
+        "bamLocation": {
+          "locationType": "UriLocation",
+          "uri": "Stem_G.bam"
+        },
+        "index": {
+          "location": {
+            "locationType": "UriLocation",
+            "uri": "Stem_G.bam.bai"
+          }
+        },
+        "sequenceAdapter": {
+          "type": "IndexedFastaAdapter",
+          "fastaLocation": {
+            "locationType": "UriLocation",
+            "uri": "SM_V10_1.fasta"
+          },
+          "faiLocation": {
+            "locationType": "UriLocation",
+            "uri": "SM_V10_1.fasta.fai"
+          }
+        }
+      },
+      "displays": [
+        {
+          "type": "LinearAlignmentsDisplay"
+        },
+        {
+          "type": "LinearPileupDisplay"
+        },
+        {
+          "type": "LinearSNPCoverageDisplay"
+        },
+        {
+          "type": "LinearReadArcsDisplay"
+        },
+        {
+          "type": "LinearReadCloudDisplay"
+        }
+      ]
+    }
+	]
+}
+
