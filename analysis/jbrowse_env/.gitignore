@@ -1,0 +1,9 @@
+*
+
+!.gitignore
+all_samples_all_celltypes.junctions.bed.rgb
+config.json
+SM_genes_of_interest.gff3
+SM_V10_1.fasta*
+Neuron_5.bam*
+Stem_G.bam*
