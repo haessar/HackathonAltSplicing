@@ -61,8 +61,8 @@
     },
 		{
 			"type": "FeatureTrack",
-			"trackId": "all_samples_all_celltypes.junctions.bed.rgb",
-			"name": "all_samples_all_celltypes.junctions.bed.rgb",
+			"trackId": "all_celltypes.junctions.bed.rgb",
+			"name": "all_celltypes.junctions.bed.rgb",
 			"assemblyNames": [
 			  "SM_V10_1"
 			],
@@ -70,7 +70,7 @@
 			  "type": "BedAdapter",
 			  "bedLocation": {
 			    "locationType": "UriLocation",
-			    "uri": "all_samples_all_celltypes.junctions.bed.rgb"
+			    "uri": "all_celltypes.junctions.bed.rgb"
 			  }
 			},
 			"displays": [
