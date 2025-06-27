@@ -14,6 +14,8 @@ def plot_by_cell_type(
     dpi=130,
     width=38,
     height=2,
+    max_score=1000,
+    min_score=0,
     temp_ini="temp.ini"
 ):
 
@@ -38,6 +40,8 @@ arrow_interval = 10
 fontsize = 10
 show_labels = true
 show_data_range = true
+min_value = {min_score}
+max_value = {max_score}
 
 [spacer]
 height = 0.5
