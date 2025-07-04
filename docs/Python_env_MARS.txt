@@ -36,7 +36,7 @@ jupyter nbconvert --to python regtools_bed_by_celltype.ipynb #This produces regt
 python3 regtools_bed_by_celltype.py
 
 #Convert jupyter notebook to python script
-jupyter nbconvert --to python rescale_by_gene_v2.ipynb #This produces rescale_by_gene.py (also in scripts folder)
+jupyter nbconvert --to python rescale_by_gene.ipynb #This produces rescale_by_gene.py (also in scripts folder)
 
 #Run the script
-python3 rescale_by_gene_v2.py
+python3 rescale_by_gene.py
