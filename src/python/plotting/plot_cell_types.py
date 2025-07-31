@@ -16,7 +16,8 @@ def plot_by_cell_type(
     height=2,
     max_score=1000,
     min_score=0,
-    temp_ini="temp.ini"
+    temp_ini="temp.ini",
+    gene_file=None
 ):
 
     if titles is None:
@@ -25,6 +26,22 @@ def plot_by_cell_type(
     with open(temp_ini, "w") as f:
         f.write("[x-axis]\nwhere = top\nshow_labels = false\n\n")
         f.write("[spacer]\nheight = 0.1\n\n")
+
+        if gene_file:
+            f.write(f"""
+[{os.path.basename(gene_file).split(".")[0]}]
+file = {gene_file}
+file_type = bed
+height = {height / 2}
+title = gene:{os.path.basename(gene_file).split(".")[0]}
+style = UCSC
+color = green
+border_color = black
+
+[spacer]
+height = 0.5
+
+""")
 
         for i, bed in enumerate(bed_files):
             f.write(f"""
