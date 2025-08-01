@@ -4,8 +4,8 @@
 #SBATCH --output=logs/smk_%A_%a.out        # one log per array task
 #SBATCH --error=logs/smk_%A_%a.err
 #SBATCH --time=12:00:00                    # adjust
-#SBATCH --cpus-per-task=128                 # threads available to Snakemake
-#SBATCH --mem=64G                          # adjust
+#SBATCH --cpus-per-task=64                 # threads available to Snakemake
+#SBATCH --mem=32G                          # adjust
 #SBATCH --partition=nodes                # adjust or delete if default
 #SBATCH --nodes=1
 
