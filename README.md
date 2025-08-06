@@ -20,6 +20,10 @@ pip install .
 python3 scripts/script_name.py [args]
 ```
 
+### Isoform detection pipeline
+
+For running the snakemake pipeline in the `isoform_detection` directory (corresponding to Workflow 2 in figure above), install conda (e.g. [Miniforge download link](https://conda-forge.org/download/)) and follow the guide in `docs/isoform_detection.md`. Slurm bash scripts for running on a HPC system can be found in the `scripts` directory.
+
 ### JBrowse 2 with plugin and custom tracks
 
 For running JBrowse 2 with the plugin developed for Workflow 1, ensure Node.js is installed (e.g. `sudo apt install nodejs npm`) and follow the guide in `jbrowse-plugin-bedfeaturecoloring/README.md`. To serve a custom `config.json` for loading in tracks for analysis, in a new terminal:
@@ -30,10 +34,6 @@ npx serve . --cors -p 3001
 ```
 
 and navigate to `http://localhost:3000/?config=http://localhost:3001/config.json` in a web browser.
-
-### Isoform detection pipeline
-
-For running the snakemake pipeline in the `isoform_detection` directory (corresponding to Workflow 2 in figure above), install conda (e.g. [Miniforge download link](https://conda-forge.org/download/)) and follow the guide in `docs/isoform_detection.md`.
 
 ## Contributing
 
