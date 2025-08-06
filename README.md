@@ -2,6 +2,39 @@
 
 ![image](https://github.com/user-attachments/assets/3f94eb52-b412-4ec2-96fc-67f5e3fb34d3)
 
+## Quick Start
+
+Clone the repository and change directory:
+
+```
+git clone https://github.com/haessar/HackathonAltSplicing.git
+cd HackathonAltSplicing
+```
+
+For running Python scripts or notebooks in `scripts` directory, first setup a Python virtual environment (tested with v3.10) and install package dependencies:
+
+```
+python3 -m venv venv-name
+source venv-name/bin/activate
+pip install .
+python3 scripts/script_name.py [args]
+```
+
+### JBrowse 2 with plugin and custom tracks
+
+For running JBrowse 2 with the plugin developed for Workflow 1, ensure Node.js is installed (e.g. `sudo apt install nodejs npm`) and follow the guide in `jbrowse-plugin-bedfeaturecoloring/README.md`. To serve a custom `config.json` for loading in tracks for analysis, in a new terminal:
+
+```
+cd analysis/jbrowse_env/
+npx serve . --cors -p 3001
+```
+
+and navigate to `http://localhost:3000/?config=http://localhost:3001/config.json` in a web browser.
+
+### Isoform detection pipeline
+
+For running the snakemake pipeline in the `isoform_detection` directory (corresponding to Workflow 2 in figure above), install conda (e.g. [Miniforge download link](https://conda-forge.org/download/)) and follow the guide in `docs/isoform_detection.md`.
+
 ## Contributing
 
 ### 🔖 Issue Labelling
