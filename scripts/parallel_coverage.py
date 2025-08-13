@@ -1,3 +1,4 @@
+from collections import Counter
 import pysam
 import pandas as pd
 import os
@@ -35,6 +36,7 @@ def process_sample(sample):
 
     total_reads = 0
     matched_reads = 0
+    elsewhere_reads = []
 
     with pysam.AlignmentFile(bam_path, "rb") as bam:
         for read in bam.fetch(until_eof=True):
@@ -42,6 +44,8 @@ def process_sample(sample):
             tags = dict(read.get_tags())
             if "CB" in tags and tags["CB"] in barcodes:
                 matched_reads += 1
+            elif "CB" in tags and tags["CB"] in set(barcode_df['cell_barcode']):
+                elsewhere_reads.append(barcode_df[barcode_df["cell_barcode"] == tags["CB"]]["sample"].values[0])
             if total_reads % 5_000_000 == 0:
                 print(f"{sample}: {total_reads:,} reads processed")
 
@@ -53,6 +57,8 @@ def process_sample(sample):
         "Matched Barcodes": matched_reads,
         "Coverage (%)": round(coverage_pct, 2)
     }
+
+    print(f"{sample} reads from elsewhere: {Counter(elsewhere_reads)}")
 
     # Save result (thread-safe)
     with lock:
