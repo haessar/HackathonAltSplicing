@@ -4,7 +4,14 @@ import os
 
 # Load barcodes
 barcode_df = pd.read_csv("/mnt/data/project0061/bam_manipulation/published/cc_barcode.csv")
-barcodes = set(barcode_df['cell_barcode'])
+
+# Sample name mapping from CSV to BAM folder names
+sample_map = {
+    "Mira_1": "sample1",
+    "Mira_3": "sample2",
+    "Mira_4": "sample3",
+    "Mira_2": "sample4"
+}
 
 # Define BAM file paths
 base_path = "/mnt/data/project0061/bam_manipulation/published/cellranger_count_Sm"
@@ -18,7 +25,11 @@ for sample in samples:
         print(f"BAM file not found: {bam_path}")
         continue
 
-    print(f"Processing {sample}...")
+    # Get only barcodes for the current sample (from CSV)
+    csv_sample_name = sample_map[sample]
+    barcodes = set(barcode_df[barcode_df['sample'] == csv_sample_name]['cell_barcode'])
+
+    print(f"Processing {sample} with {len(barcodes)} barcodes...")
     bam = pysam.AlignmentFile(bam_path, "rb")
 
     total_reads = 0
