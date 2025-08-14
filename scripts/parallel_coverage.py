@@ -46,7 +46,7 @@ def process_sample(sample):
                 matched_reads += 1
             elif "CB" in tags and tags["CB"] in set(barcode_df['cell_barcode']):
                 elsewhere_reads.append(barcode_df[barcode_df["cell_barcode"] == tags["CB"]]["sample"].values[0])
-            if total_reads % 5_000_000 == 0:
+            if total_reads % 1_000_000 == 0:
                 print(f"{sample}: {total_reads:,} reads processed")
                 print(f"{sample} reads from elsewhere: {Counter(elsewhere_reads)}")
 
