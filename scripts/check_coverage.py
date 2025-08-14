@@ -7,10 +7,10 @@ barcode_df = pd.read_csv("/mnt/data/project0061/bam_manipulation/published/cc_ba
 
 # Sample name mapping from CSV to BAM folder names
 sample_map = {
-    "Mira_1": "sample1",
+    "Mira_1": "sample4",
     "Mira_3": "sample2",
     "Mira_4": "sample3",
-    "Mira_2": "sample4"
+    "Mira_2": "sample1"
 }
 
 # Define BAM file paths
