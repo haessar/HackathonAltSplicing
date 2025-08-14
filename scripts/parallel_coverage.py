@@ -48,6 +48,7 @@ def process_sample(sample):
                 elsewhere_reads.append(barcode_df[barcode_df["cell_barcode"] == tags["CB"]]["sample"].values[0])
             if total_reads % 5_000_000 == 0:
                 print(f"{sample}: {total_reads:,} reads processed")
+                print(f"{sample} reads from elsewhere: {Counter(elsewhere_reads)}")
 
     coverage_pct = (matched_reads / total_reads * 100) if total_reads > 0 else 0
 
