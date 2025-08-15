@@ -1,17 +1,24 @@
 import pysam
 import pandas as pd
 import os
-from multiprocessing import Pool, Lock
+from multiprocessing import get_context, Lock
 
 # Output file path for saving results
 output_file = "barcode_coverage_parallel_results.csv"
 lock = Lock()
 
-# Load the list of barcodes from the input CSV
+# Load barcodes CSV once globally
 barcode_df = pd.read_csv("/mnt/data/project0061/bam_manipulation/published/cc_barcode.csv")
-barcodes = set(barcode_df['cell_barcode'])
 
-# Define the base path to all sample directories
+# Sample name mapping
+sample_map = {
+    "Mira_1": "sample4",
+    "Mira_3": "sample2",
+    "Mira_4": "sample3",
+    "Mira_2": "sample1"
+}
+
+# BAM base path and sample list
 base_path = "/mnt/data/project0061/bam_manipulation/published/cellranger_count_Sm"
 samples = ["Mira_1", "Mira_2", "Mira_3", "Mira_4"]
 
@@ -20,23 +27,23 @@ def process_sample(sample):
     print(f"Processing sample: {sample} ({bam_path})")
 
     if not os.path.exists(bam_path):
-        print(f"BAM file not found for sample: {sample}")
+        print(f"❌ BAM file not found for {sample}")
         return None
 
-    bam = pysam.AlignmentFile(bam_path, "rb")
+    csv_sample_name = sample_map[sample]
+    barcodes = set(barcode_df[barcode_df["sample"] == csv_sample_name]["cell_barcode"])
+
     total_reads = 0
     matched_reads = 0
 
-    for read in bam.fetch(until_eof=True):
-        total_reads += 1
-        tags = dict(read.get_tags())
-        if "CB" in tags and tags["CB"] in barcodes:
-            matched_reads += 1
-
-        if total_reads % 5_000_000 == 0:
-            print(f"{sample}: {total_reads:,} reads processed")
-
-    bam.close()
+    with pysam.AlignmentFile(bam_path, "rb") as bam:
+        for read in bam.fetch(until_eof=True):
+            total_reads += 1
+            tags = dict(read.get_tags())
+            if "CB" in tags and tags["CB"] in barcodes:
+                matched_reads += 1
+            if total_reads % 5_000_000 == 0:
+                print(f"{sample}: {total_reads:,} reads processed")
 
     coverage_pct = (matched_reads / total_reads * 100) if total_reads > 0 else 0
 
@@ -47,19 +54,19 @@ def process_sample(sample):
         "Coverage (%)": round(coverage_pct, 2)
     }
 
-    # Save the result immediately after processing each sample
+    # Save result (thread-safe)
     with lock:
         df = pd.DataFrame([result])
-        if not os.path.exists(output_file):
-            df.to_csv(output_file, index=False)
-        else:
-            df.to_csv(output_file, mode='a', header=False, index=False)
-        print(f"Finished processing {sample}. Results written to file.")
+        write_mode = 'a' if os.path.exists(output_file) else 'w'
+        header = not os.path.exists(output_file)
+        df.to_csv(output_file, mode=write_mode, index=False, header=header)
+        print(f"✅ Finished {sample}. Results written.")
 
     return result
 
 if __name__ == "__main__":
-    with Pool(processes=4) as pool:
+    # Multiprocessing with spawn method (safe in Conda envs)
+    with get_context("spawn").Pool(processes=4) as pool:
         pool.map(process_sample, samples)
 
-    print(f"All samples have been processed. Results saved to {output_file}")
+    print(f"✅ All samples processed. Results saved to {output_file}")
