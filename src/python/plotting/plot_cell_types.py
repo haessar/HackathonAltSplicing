@@ -39,7 +39,7 @@ color = green
 border_color = black
 
 [spacer]
-height = 0.5
+height = 0.1
 
 """)
 
@@ -59,9 +59,10 @@ show_labels = true
 show_data_range = true
 min_value = {min_score}
 max_value = {max_score}
+gene_rows = 3
 
 [spacer]
-height = 0.5
+height = 0.1
 
 """)
 

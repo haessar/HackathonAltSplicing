@@ -17,6 +17,7 @@ if __name__ == "__main__":
         colormaps=["Reds", "Reds", "Blues", "Blues"],
         max_score=100,
         min_score=10,
-        gene_file=gene_file
+        gene_file=gene_file,
+        height=3
     )
     TEMP_INI_PATH.unlink()
